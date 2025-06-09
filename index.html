@@ -260,6 +260,57 @@
             background: var(--secondary);
         }
 
+        /* Игровой интерфейс */
+        #game-interface {
+            display: none;
+            background-color: var(--dark);
+            border-radius: 20px;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        #game-interface h2 {
+            margin-bottom: 2rem;
+            color: var(--primary);
+        }
+
+        .stats {
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .skill-btn {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            background: var(--primary);
+            color: var(--darker);
+            transition: all 0.3s ease;
+        }
+
+        .skill-btn:hover {
+            background: var(--secondary);
+        }
+
+        #character-model {
+            width: 100%;
+            height: 400px;
+            background: #000;
+            margin-top: 2rem;
+        }
+
         /* Адаптивность */
         @media (max-width: 768px) {
             nav ul {
@@ -279,14 +330,6 @@
 
         .glow {
             text-shadow: 0 0 10px currentColor;
-        }
-
-        /* 3D модель */
-        #character-model {
-            width: 100%;
-            height: 400px;
-            background: #000;
-            margin-top: 2rem;
         }
     </style>
 </head>
@@ -360,14 +403,8 @@
     <section id="cta">
         <h2 class="glow">Ready to Play?</h2>
         <p>Join thousands of players and start your adventure today.</p>
-        <button class="btn btn-primary glow">Play Now</button>
+        <button class="btn btn-primary glow" onclick="startGame()">Play Now</button>
         <button class="btn btn-secondary glow" onclick="document.getElementById('register-modal').style.display = 'flex'">Create Account</button>
-    </section>
-
-    <!-- Раздел 5: 3D модель персонажа -->
-    <section id="character-section">
-        <h2 class="glow">Character Preview</h2>
-        <div id="character-model"></div>
     </section>
 
     <!-- Модальное окно регистрации -->
@@ -402,6 +439,26 @@
             </form>
         </div>
     </div>
+
+    <!-- Игровой интерфейс -->
+    <section id="game-interface">
+        <h2 class="glow">Battle Interface</h2>
+        <div class="stats">
+            <p>Class: <span id="user-class">None</span></p>
+            <p>Level: <span id="user-level">1</span></p>
+            <p>XP: <span id="user-xp">0</span></p>
+            <p>HP: <span id="user-hp">100</span></p>
+            <p>Gold: <span id="user-gold">100</span></p>
+        </div>
+        <div id="character-model"></div>
+        <div class="action-buttons">
+            <button class="skill-btn" onclick="attack()">Attack</button>
+            <button class="skill-btn" onclick="useSkill('fireball')">Fireball</button>
+            <button class="skill-btn" onclick="useSkill('heal')">Heal</button>
+            <button class="skill-btn" onclick="runFromBattle()">Run</button>
+        </div>
+        <p id="battle-result" style="margin-top: 1rem;"></p>
+    </section>
 
     <!-- Подключаем библиотеки -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script> 
@@ -570,8 +627,13 @@
                 const user = users.find(u => u.username === username);
                 localStorage.setItem("loggedInUser", username);
                 localStorage.setItem("userClass", user.class);
+                localStorage.setItem("userLevel", 1);
+                localStorage.setItem("userXp", 0);
+                localStorage.setItem("userHp", 100);
+                localStorage.setItem("userGold", 100);
                 alert("Login successful!");
                 document.getElementById("login-modal").style.display = "none";
+                startGame();
             } else {
                 alert("Invalid username or password.");
             }
@@ -591,6 +653,139 @@
             }
         });
 
+        // Запуск игры
+        function startGame() {
+            const user = localStorage.getItem("loggedInUser");
+            if (!user) {
+                alert("You must be logged in to play.");
+                return;
+            }
+
+            const userClass = localStorage.getItem("userClass");
+            if (!userClass) {
+                alert("Select a class before entering battle.");
+                document.getElementById("register-modal").style.display = "flex";
+                return;
+            }
+
+            document.getElementById("user-class").textContent = userClass;
+            document.getElementById("user-level").textContent = localStorage.getItem("userLevel") || 1;
+            document.getElementById("user-xp").textContent = localStorage.getItem("userXp") || 0;
+            document.getElementById("user-hp").textContent = localStorage.getItem("userHp") || 100;
+            document.getElementById("user-gold").textContent = localStorage.getItem("userGold") || 100;
+            document.getElementById("game-interface").style.display = "block";
+
+            initCharacterModel(userClass);
+        }
+
+        // Атаковать противника
+        function attack() {
+            const enemy = generateEnemy();
+            const userHp = parseInt(localStorage.getItem("userHp"));
+            const userLevel = parseInt(localStorage.getItem("userLevel"));
+
+            const damage = Math.floor(Math.random() * (10 + userLevel));
+            const newHp = userHp - damage;
+
+            localStorage.setItem("userHp", newHp);
+            document.getElementById("user-hp").textContent = newHp;
+
+            document.getElementById("battle-result").textContent = `You attacked the ${enemy.name} and dealt ${damage} damage.`;
+
+            setTimeout(() => {
+                if (newHp <= 0) {
+                    document.getElementById("battle-result").textContent = "You have been defeated!";
+                } else {
+                    document.getElementById("battle-result").textContent = "You survived the battle!";
+                    gainReward(enemy);
+                }
+            }, 1500);
+        }
+
+        // Использовать навык
+        function useSkill(skill) {
+            const enemy = generateEnemy();
+            const userHp = parseInt(localStorage.getItem("userHp"));
+            const userLevel = parseInt(localStorage.getItem("userLevel"));
+
+            if (userHp <= 0) {
+                alert("You are dead!");
+                return;
+            }
+
+            if (skill === "heal") {
+                const healAmount = 20;
+                const newHp = Math.min(userHp + healAmount, 100 + userLevel * 10);
+                localStorage.setItem("userHp", newHp);
+                document.getElementById("user-hp").textContent = newHp;
+                document.getElementById("battle-result").textContent = `Used Heal. HP increased by ${healAmount}.`;
+            } else if (skill === "fireball") {
+                const damage = Math.floor(Math.random() * (30 + userLevel));
+                const newEnemyHp = Math.max(0, 100 - damage);
+                document.getElementById("battle-result").textContent = `Used Fireball. Dealt ${damage} damage to ${enemy.name}.`;
+
+                if (newEnemyHp <= 0) {
+                    document.getElementById("battle-result").textContent += " You won!";
+                    gainReward(enemy);
+                }
+            }
+        }
+
+        // Сгенерировать случайного противника
+        function generateEnemy() {
+            const enemies = [
+                { name: "Goblin", hp: 100 },
+                { name: "Orc", hp: 120 },
+                { name: "Bandit", hp: 90 }
+            ];
+            const randomEnemy = enemies[Math.floor(Math.random() * enemies.length)];
+            return randomEnemy;
+        }
+
+        // Получить награду за победу
+        function gainReward(enemy) {
+            const xpEarned = Math.floor(Math.random() * 20 + 20);
+            const goldEarned = Math.floor(Math.random() * 20 + 20);
+
+            let userXp = parseInt(localStorage.getItem("userXp")) || 0;
+            let userGold = parseInt(localStorage.getItem("userGold")) || 100;
+
+            userXp += xpEarned;
+            userGold += goldEarned;
+
+            localStorage.setItem("userXp", userXp);
+            localStorage.setItem("userGold", userGold);
+
+            document.getElementById("user-xp").textContent = userXp;
+            document.getElementById("user-gold").textContent = userGold;
+
+            increaseLevel(xpEarned);
+        }
+
+        // Увеличить уровень
+        function increaseLevel(xpEarned) {
+            let level = parseInt(localStorage.getItem("userLevel")) || 1;
+            let xp = parseInt(localStorage.getItem("userXp")) || 0;
+            xp += xpEarned;
+
+            if (xp >= level * 100) {
+                level++;
+                xp -= level * 100;
+                alert(`You leveled up to Level ${level}!`);
+            }
+
+            localStorage.setItem("userLevel", level);
+            localStorage.setItem("userXp", xp);
+
+            document.getElementById("user-level").textContent = level;
+            document.getElementById("user-xp").textContent = xp;
+        }
+
+        // Убежать от боя
+        function runFromBattle() {
+            document.getElementById("battle-result").textContent = "You ran away!";
+        }
+
         // Инициализация 3D модели
         function initCharacterModel(classType) {
             const modelContainer = document.getElementById("character-model");
@@ -603,7 +798,9 @@
             modelContainer.appendChild(renderer.domElement);
 
             const geometry = new THREE.BoxGeometry();
-            const material = new THREE.MeshStandardMaterial({ color: classType === "warrior" ? 0xff0000 : classType === "mage" ? 0x0000ff : 0x00ff00 });
+            const material = new THREE.MeshStandardMaterial({
+                color: classType === "warrior" ? 0xff0000 : classType === "mage" ? 0x0000ff : 0x00ff00
+            });
             const cube = new THREE.Mesh(geometry, material);
             scene.add(cube);
 
@@ -634,11 +831,20 @@
             });
         }
 
-        // Запуск 3D модели при загрузке страницы
+        // Обновление профиля при загрузке страницы
         window.onload = () => {
-            const userClass = localStorage.getItem("userClass");
-            if (userClass) {
-                initCharacterModel(userClass);
+            const user = localStorage.getItem("loggedInUser");
+            if (user) {
+                document.getElementById("user-class").textContent = localStorage.getItem("userClass");
+                document.getElementById("user-level").textContent = localStorage.getItem("userLevel");
+                document.getElementById("user-xp").textContent = localStorage.getItem("userXp");
+                document.getElementById("user-hp").textContent = localStorage.getItem("userHp");
+                document.getElementById("user-gold").textContent = localStorage.getItem("userGold");
+
+                const userClass = localStorage.getItem("userClass");
+                if (userClass) {
+                    initCharacterModel(userClass);
+                }
             }
         };
     </script>
