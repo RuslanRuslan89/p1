@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfect World | Next-Gen MMORPG</title>
-
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
-
     <style>
         :root {
             --primary: #00f7ff; 
@@ -27,18 +24,18 @@
             font-family: 'Rajdhani', sans-serif;
             background-color: var(--darker);
             color: var(--light);
-            overflow: hidden;
-            height: 100vh;
-            perspective: 1000px;
+            height: auto;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
         #game-container {
             position: relative;
             width: 100%;
-            height: 100%;
+            padding: 2rem 1rem;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: start;
         }
 
         #particles-js {
@@ -62,6 +59,8 @@
             backdrop-filter: blur(10px);
             transform-style: preserve-3d;
             animation: float 6s ease-in-out infinite;
+            margin-top: 100px;
+            margin-bottom: 100px;
         }
 
         .menu-header {
@@ -95,7 +94,6 @@
             justify-content: center;
             gap: 2rem;
             margin-bottom: 3rem;
-            flex-wrap: wrap;
         }
 
         .nav-item {
@@ -136,6 +134,8 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
+            max-height: 70vh;
+            overflow-y: auto;
         }
 
         .character-display {
@@ -244,7 +244,6 @@
             display: flex;
             gap: 1rem;
             margin-top: 2rem;
-            flex-wrap: wrap;
         }
 
         .btn {
@@ -292,6 +291,7 @@
             }
         }
 
+        /* Эффекты неонового свечения */
         .glow {
             text-shadow: 0 0 10px currentColor;
         }
@@ -319,260 +319,6 @@
                 font-size: 2.5rem;
             }
         }
-
-        /* Модальные окна */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 9999;
-            animation: fadeIn 0.4s ease forwards;
-        }
-
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(10, 10, 32, 0.9);
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(0, 247, 255, 0.3);
-            backdrop-filter: blur(10px);
-            max-width: 500px;
-            width: 90%;
-            text-align: center;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            font-size: 1.5rem;
-            color: var(--primary);
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .close-btn:hover {
-            color: var(--secondary);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Профиль */
-        .user-profile {
-            margin-top: 2rem;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 1rem;
-            border-left: 4px solid var(--primary);
-            display: none;
-        }
-
-        .profile-info {
-            font-size: 1rem;
-            color: var(--light);
-            margin-top: 0.5rem;
-        }
-
-        .profile-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .stat-line {
-            font-size: 0.9rem;
-        }
-
-        .inventory-list {
-            margin-top: 1rem;
-        }
-
-        .inventory-item {
-            display: inline-block;
-            margin: 0.5rem;
-            padding: 0.5rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-        }
-
-        .add-inventory-btn {
-            margin-top: 1rem;
-            padding: 0.5rem 1rem;
-            background: var(--primary);
-            color: var(--darker);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .add-inventory-btn:hover {
-            background: var(--secondary);
-        }
-
-        /* Бой */
-        #battle-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 9999;
-            animation: fadeIn 0.4s ease forwards;
-        }
-
-        .battle-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(10, 10, 32, 0.9);
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(0, 247, 255, 0.3);
-            backdrop-filter: blur(10px);
-            max-width: 500px;
-            width: 90%;
-            text-align: center;
-        }
-
-        .skills-list {
-            margin-top: 1rem;
-        }
-
-        .skill-btn {
-            margin: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: var(--primary);
-            color: var(--darker);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .skill-btn:hover {
-            background: var(--secondary);
-        }
-
-        /* Магазин */
-        #shop-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 9999;
-            animation: fadeIn 0.4s ease forwards;
-        }
-
-        .shop-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(10, 10, 32, 0.9);
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(0, 247, 255, 0.3);
-            backdrop-filter: blur(10px);
-            max-width: 500px;
-            width: 90%;
-            text-align: center;
-        }
-
-        .item {
-            margin: 1rem 0;
-        }
-
-        .item-label {
-            font-size: 1rem;
-            color: var(--light);
-        }
-
-        .item-price {
-            font-size: 0.9rem;
-            color: var(--primary);
-        }
-
-        .buy-btn {
-            margin-top: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: var(--primary);
-            color: var(--darker);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .buy-btn:hover {
-            background: var(--secondary);
-        }
-
-        /* Логи боёв */
-        #battle-log-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 9999;
-            animation: fadeIn 0.4s ease forwards;
-        }
-
-        .battle-log-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(10, 10, 32, 0.9);
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(0, 247, 255, 0.3);
-            backdrop-filter: blur(10px);
-            max-width: 500px;
-            width: 90%;
-            text-align: center;
-        }
-
-        .log-entry {
-            margin: 0.5rem 0;
-            font-size: 0.9rem;
-        }
-
-        /* 3D модель */
-        #character-model {
-            width: 100%;
-            height: 100%;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .enemy-model {
-            width: 100%;
-            height: 100%;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
     </style>
 </head>
 <body>
@@ -582,24 +328,19 @@
             <div class="menu-header">
                 <h1 class="game-logo glow">PERFECT WORLD</h1>
                 <p class="game-subtitle">Next-Generation MMORPG Experience</p>
-                <p id="login-message" style="margin-top: 1rem;"></p>
             </div>
             <nav class="menu-nav">
-                <a href="#" onclick="showTab('home')" class="nav-item">Home</a>
-                <a href="#" onclick="showTab('classes')" class="nav-item">Classes</a>
-                <a href="#" onclick="showTab('world')" class="nav-item">World</a>
-                <a href="#" onclick="showTab('pvp')" class="nav-item">PvP</a>
-                <a href="#" onclick="showTab('shop')" class="nav-item">Shop</a>
-                <a href="#" onclick="showTab('community')" class="nav-item">Community</a>
-                <a href="#" onclick="showTab('profile')" class="nav-item">Profile</a>
-                <a href="#" onclick="openBattle()" class="nav-item">Battle</a>
-                <a href="#" onclick="showTab('battle-log')" class="nav-item">Battle Log</a>
+                <a href="#" class="nav-item">Home</a>
+                <a href="#" class="nav-item">Classes</a>
+                <a href="#" class="nav-item">World</a>
+                <a href="#" class="nav-item">PvP</a>
+                <a href="#" class="nav-item">Shop</a>
+                <a href="#" class="nav-item">Community</a>
             </nav>
-
-            <!-- Вкладка Home -->
-            <div id="tab-home" class="menu-content active">
+            <div class="menu-content">
                 <div class="character-display">
-                    <div class="character-3d" id="character-model">
+                    <div class="character-3d">
+                        <!-- Здесь будет 3D-модель персонажа с WebGL -->
                         <p>3D CHARACTER PREVIEW</p>
                     </div>
                 </div>
@@ -640,187 +381,16 @@
                         </div>
                     </div>
                     <div class="action-buttons">
-                        <button onclick="openBattle()" class="btn btn-primary">PLAY NOW</button>
-                        <button id="toggle-register" class="btn btn-secondary">CREATE ACCOUNT</button>
-                        <button id="toggle-login" class="btn btn-secondary">LOGIN</button>
+                        <button class="btn btn-primary">PLAY NOW</button>
+                        <button class="btn btn-secondary">CREATE ACCOUNT</button>
                     </div>
                 </div>
-
-                <!-- Вкладка Classes -->
-                <div id="tab-classes" class="menu-content">
-                    <h3>Available Classes</h3>
-                    <ul>
-                        <li><strong>Warrior</strong> – High attack and defense.</li>
-                        <li><strong>Mage</strong> – Strong magic skills and high intelligence.</li>
-                        <li><strong>Ranger</strong> – Fast attacks and good mobility.</li>
-                    </ul>
-                    <button onclick="classModal.style.display = 'flex'" class="btn btn-secondary">Select Class</button>
-                </div>
-
-                <!-- Вкладка World -->
-                <div id="tab-world" class="menu-content">
-                    <h3>World Map</h3>
-                    <p>Welcome to the world of Perfect World! Explore the vast lands filled with quests, enemies, and treasures.</p>
-                    <p>Currently you are in: <span id="current-location">Forest</span></p>
-                    <button onclick="alert('You have moved to a new location!')">Travel</button>
-                </div>
-
-                <!-- Вкладка PvP -->
-                <div id="tab-pvp" class="menu-content">
-                    <h3>PvP Arena</h3>
-                    <p>Compete against other players in real-time battles!</p>
-                    <button onclick="alert('Arena is currently under maintenance.')">Enter Arena</button>
-                </div>
-
-                <!-- Вкладка Shop -->
-                <div id="tab-shop" class="menu-content">
-                    <h3>Shop</h3>
-                    <p>Buy items and equipment to help you on your journey.</p>
-                    <button onclick="shopModal.style.display = 'flex'">Open Shop</button>
-                </div>
-
-                <!-- Вкладка Community -->
-                <div id="tab-community" class="menu-content">
-                    <h3>Community</h3>
-                    <p>Join our community to chat with other players, share tips, and more!</p>
-                    <button onclick="alert('Community is coming soon.')">Join Now</button>
-                </div>
-
-                <!-- Вкладка Profile -->
-                <div id="tab-profile" class="menu-content">
-                    <h3>Your Profile</h3>
-                    <div class="user-profile" id="user-profile">
-                        <h4>Logged in as:</h4>
-                        <p id="profile-username" class="profile-info"></p>
-                        <p id="profile-class" class="profile-info"></p>
-                        <div class="profile-stats">
-                            <div class="stat-line">Level: <span id="level-value">1</span></div>
-                            <div class="stat-line">XP: <span id="xp-value">0</span></div>
-                            <div class="stat-line">HP: <span id="hp-value">100</span></div>
-                            <div class="stat-line">Attack: <span id="attack-value">10</span></div>
-                            <div class="stat-line">Defense: <span id="defense-value">5</span></div>
-                            <div class="stat-line">Gold: <span id="gold-value">100</span></div>
-                        </div>
-                        <div class="inventory-list" id="inventory-list"></div>
-                        <button onclick="addItem('Sword')" class="add-inventory-btn">Add Sword</button>
-                        <button onclick="addItem('Shield')" class="add-inventory-btn">Add Shield</button>
-                        <button onclick="addItem('Potion')" class="add-inventory-btn">Add Potion</button>
-                        <button onclick="removeItem('Sword')" class="add-inventory-btn">Remove Sword</button>
-                        <button onclick="removeItem('Shield')" class="add-inventory-btn">Remove Shield</button>
-                        <button onclick="removeItem('Potion')" class="add-inventory-btn">Remove Potion</button>
-                    </div>
-                </div>
-
-                <!-- Вкладка Battle Log -->
-                <div id="tab-battle-log" class="menu-content">
-                    <h3>Battle Logs</h3>
-                    <div id="battle-logs" class="inventory-list"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Модальное окно регистрации -->
-        <div id="register-modal" class="modal-overlay">
-            <div class="modal-content">
-                <span class="close-btn">&times;</span>
-                <h3>Register</h3>
-                <form onsubmit="handleRegistration(event)">
-                    <input type="text" id="username" placeholder="Username" required><br>
-                    <input type="email" id="email" placeholder="Email" required><br>
-                    <input type="password" id="password" placeholder="Password" required><br>
-                    <button type="submit">Create Account</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Модальное окно логина -->
-        <div id="login-modal" class="modal-overlay">
-            <div class="modal-content">
-                <span class="close-btn">&times;</span>
-                <h3>Login</h3>
-                <form onsubmit="handleLogin(event)">
-                    <input type="text" id="login-username" placeholder="Username" required><br>
-                    <input type="password" id="login-password" placeholder="Password" required><br>
-                    <button type="submit">Login</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Модальное окно выбора класса -->
-        <div id="class-modal" class="modal-overlay">
-            <div class="modal-content">
-                <span class="close-btn">&times;</span>
-                <h3>Select Class</h3>
-                <form onsubmit="handleClassSelection(event)">
-                    <select id="class-select" required>
-                        <option value="">-- Choose a class --</option>
-                        <option value="warrior">Warrior</option>
-                        <option value="mage">Mage</option>
-                        <option value="ranger">Ranger</option>
-                    </select><br>
-                    <button type="submit">Confirm</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Модальное окно магазина -->
-        <div id="shop-modal" class="modal-overlay">
-            <div class="shop-content">
-                <span class="close-btn">&times;</span>
-                <h3>Shop</h3>
-                <p>Gold: <span id="gold-value">100</span></p>
-                <div class="item">
-                    <div class="item-label">Sword</div>
-                    <div class="item-price">Cost: 20</div>
-                    <button onclick="buyItem('sword', 20)" class="buy-btn">Buy</button>
-                </div>
-                <div class="item">
-                    <div class="item-label">Shield</div>
-                    <div class="item-price">Cost: 30</div>
-                    <button onclick="buyItem('shield', 30)" class="buy-btn">Buy</button>
-                </div>
-                <div class="item">
-                    <div class="item-label">Potion</div>
-                    <div class="item-price">Cost: 10</div>
-                    <button onclick="buyItem('potion', 10)" class="buy-btn">Buy</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Модальное окно боя -->
-        <div id="battle-modal" class="modal-overlay">
-            <div class="battle-content">
-                <span class="close-btn">&times;</span>
-                <h3>Battle Interface</h3>
-                <p id="battle-hp">HP: <span id="battle-hp-value">100</span></p>
-                <p id="battle-level">Level: <span id="battle-level-value">1</span></p>
-                <p id="battle-xp">XP: <span id="battle-xp-value">0</span></p>
-                <p id="battle-class">Class: <span id="battle-class-value">None</span></p>
-                <p id="battle-result" style="margin-top: 1rem;"></p>
-                <div class="skills-list">
-                    <button onclick="useSkill('fireball')" class="skill-btn">Fireball</button>
-                    <button onclick="useSkill('heal')" class="skill-btn">Heal</button>
-                    <button onclick="useSkill('slash')" class="skill-btn">Slash</button>
-                    <button onclick="runFromBattle()">Run</button>
-                </div>
-                <button onclick="endBattle()" class="btn btn-secondary">End Battle</button>
-            </div>
-        </div>
-
-        <!-- Модальное окно логов -->
-        <div id="battle-log-modal" class="modal-overlay">
-            <div class="battle-log-content">
-                <span class="close-btn">&times;</span>
-                <h3>Battle Logs</h3>
-                <div id="battle-logs" class="inventory-list"></div>
             </div>
         </div>
     </div>
 
-    <!-- Подключаем библиотеки -->
+    <!-- Подключаем библиотеки для эффектов -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/examples/js/controls/OrbitControls.min.js"></script> 
     <script>
         // Инициализация частиц фона
         particlesJS('particles-js', {
@@ -920,322 +490,16 @@
             menu.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         });
 
-        // Показать вкладку
-        function showTab(tabId) {
-            document.querySelectorAll('[id^="tab-"]').forEach(tab => tab.classList.remove('active'));
-            document.getElementById(`tab-${tabId}`).classList.add('active');
-        }
-
-        // Обработка кнопок
-        const registerBtn = document.getElementById("toggle-register");
-        const loginBtn = document.getElementById("toggle-login");
-        const registerModal = document.getElementById("register-modal");
-        const loginModal = document.getElementById("login-modal");
-        const classModal = document.getElementById("class-modal");
-        const shopModal = document.getElementById("shop-modal");
-        const battleLogModal = document.getElementById("battle-log-modal");
-
-        registerBtn.addEventListener("click", () => {
-            registerModal.style.display = "flex";
-        });
-
-        loginBtn.addEventListener("click", () => {
-            loginModal.style.display = "flex";
-        });
-
-        window.addEventListener("click", (e) => {
-            if (e.target === registerModal || e.target === loginModal || e.target === classModal || e.target === shopModal || e.target === battleLogModal) {
-                e.target.style.display = "none";
-            }
-        });
-
-        // Показать сообщение о входе
-        function showLoginMessage(username) {
-            const msg = document.getElementById("login-message");
-            msg.textContent = "Logged in as: " + username;
-        }
-
-        // Показать профиль
-        function showProfile() {
-            const profile = document.getElementById("user-profile");
-            const username = localStorage.getItem("loggedInUser") || "Guest";
-            const userClass = localStorage.getItem("userClass") || "None";
-            const level = parseInt(localStorage.getItem("userLevel")) || 1;
-            const xp = parseInt(localStorage.getItem("userXp")) || 0;
-            const hp = parseInt(localStorage.getItem("userHp")) || 100;
-            const attack = parseInt(localStorage.getItem("userAttack")) || 10;
-            const defense = parseInt(localStorage.getItem("userDefense")) || 5;
-            const gold = parseInt(localStorage.getItem("userGold")) || 100;
-
-            document.getElementById("profile-username").textContent = username;
-            document.getElementById("profile-class").textContent = "Class: " + userClass;
-            document.getElementById("level-value").textContent = level;
-            document.getElementById("xp-value").textContent = xp;
-            document.getElementById("hp-value").textContent = hp;
-            document.getElementById("attack-value").textContent = attack;
-            document.getElementById("defense-value").textContent = defense;
-            document.getElementById("gold-value").textContent = gold;
-
-            const inventoryList = document.getElementById("inventory-list");
-            inventoryList.innerHTML = "";
-            const items = JSON.parse(localStorage.getItem("userInventory") || "[]");
-            items.forEach(item => {
-                const itemDiv = document.createElement("div");
-                itemDiv.className = "inventory-item";
-                itemDiv.textContent = item;
-                inventoryList.appendChild(itemDiv);
+        // Анимация кнопок
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                button.classList.add('glow');
             });
-
-            profile.style.display = "block";
-        }
-
-        // Увеличить уровень
-        function increaseLevel(xpEarned) {
-            let level = parseInt(localStorage.getItem("userLevel")) || 1;
-            let xp = parseInt(localStorage.getItem("userXp")) || 0;
-            xp += xpEarned;
-            if (xp >= level * 100) {
-                level++;
-                xp -= level * 100;
-                alert(`You leveled up to Level ${level}!`);
-            }
-            localStorage.setItem("userLevel", level);
-            localStorage.setItem("userXp", xp);
-            document.getElementById("level-value").textContent = level;
-            document.getElementById("xp-value").textContent = xp;
-        }
-
-        // Добавить предмет
-        function addItem(item) {
-            let inventory = JSON.parse(localStorage.getItem("userInventory") || "[]");
-            if (!inventory.includes(item)) {
-                inventory.push(item);
-                localStorage.setItem("userInventory", JSON.stringify(inventory));
-                showProfile();
-            } else {
-                alert(item + " is already in your inventory.");
-            }
-        }
-
-        // Удалить предмет
-        function removeItem(item) {
-            let inventory = JSON.parse(localStorage.getItem("userInventory") || "[]");
-            const index = inventory.indexOf(item);
-            if (index !== -1) {
-                inventory.splice(index, 1);
-                localStorage.setItem("userInventory", JSON.stringify(inventory));
-                showProfile();
-            } else {
-                alert(item + " not found in your inventory.");
-            }
-        }
-
-        // Обработка формы регистрации
-        function handleRegistration(e) {
-            e.preventDefault();
-
-            const username = document.getElementById("username").value.trim();
-            const email = document.getElementById("email").value.trim();
-            const password = document.getElementById("password").value;
-
-            if (!username || !email || !password) {
-                alert("Please fill in all fields.");
-                return;
-            }
-
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                alert("Invalid email format.");
-                return;
-            }
-
-            const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-            users.push({ username, email, password });
-            localStorage.setItem('registeredUsers', JSON.stringify(users));
-
-            alert("Account created successfully!");
-            registerModal.style.display = "none";
-
-            document.getElementById("username").value = "";
-            document.getElementById("email").value = "";
-            document.getElementById("password").value = "";
-        }
-
-        // Обработка формы логина
-        function handleLogin(e) {
-            e.preventDefault();
-
-            const username = document.getElementById("login-username").value.trim();
-            const password = document.getElementById("login-password").value.trim();
-
-            if (!username || !password) {
-                alert("Please enter your username and password.");
-                return;
-            }
-
-            const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-            const userExists = users.some(user => user.username === username && user.password === password);
-
-            if (userExists) {
-                localStorage.setItem("loggedInUser", username);
-                localStorage.setItem("userClass", "");
-                localStorage.setItem("userLevel", 1);
-                localStorage.setItem("userXp", 0);
-                localStorage.setItem("userHp", 100);
-                localStorage.setItem("userAttack", 10);
-                localStorage.setItem("userDefense", 5);
-                localStorage.setItem("userGold", 100);
-                localStorage.setItem("userInventory", JSON.stringify([]));
-                showLoginMessage(username);
-                showProfile();
-                classModal.style.display = "flex";
-            } else {
-                alert("Invalid username or password.");
-            }
-
-            document.getElementById("login-username").value = "";
-            document.getElementById("login-password").value = "";
-            loginModal.style.display = "none";
-        }
-
-        // Обработка выбора класса
-        function handleClassSelection(e) {
-            e.preventDefault();
-
-            const selectedClass = document.getElementById("class-select").value;
-            if (!selectedClass) {
-                alert("Please select a class.");
-                return;
-            }
-
-            localStorage.setItem("userClass", selectedClass);
-            initCharacterModel(selectedClass);
-            classModal.style.display = "none";
-            showProfile();
-        }
-
-        // Инициализация 3D модели
-        function initCharacterModel(classType) {
-            const modelContainer = document.getElementById("character-model");
-            modelContainer.innerHTML = "";
-
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            modelContainer.appendChild(renderer.domElement);
-
-            const geometry = new THREE.BoxGeometry();
-            const material = new THREE.MeshStandardMaterial({ color: classType === "warrior" ? 0xff0000 : classType === "mage" ? 0x0000ff : 0x00ff00 });
-            const cube = new THREE.Mesh(geometry, material);
-            scene.add(cube);
-
-            const light = new THREE.DirectionalLight(0xffffff, 1);
-            light.position.set(0, 1, 1).normalize();
-            scene.add(light);
-
-            camera.position.z = 5;
-
-            const controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
-
-            function animate() {
-                requestAnimationFrame(animate);
-                cube.rotation.x += 0.01;
-                cube.rotation.y += 0.01;
-                controls.update();
-                renderer.render(scene, camera);
-            }
-
-            animate();
-
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
+            button.addEventListener('mouseleave', () => {
+                button.classList.remove('glow');
             });
-        }
-
-        // Открытие боя
-        function openBattle() {
-            const user = localStorage.getItem("loggedInUser");
-            if (!user) {
-                alert("You must be logged in to play.");
-                return;
-            }
-
-            const userClass = localStorage.getItem("userClass");
-            if (!userClass) {
-                alert("Select a class before entering battle.");
-                classModal.style.display = "flex";
-                return;
-            }
-
-            document.getElementById("battle-class-value").textContent = userClass;
-            document.getElementById("battle-level-value").textContent = localStorage.getItem("userLevel");
-            document.getElementById("battle-xp-value").textContent = localStorage.getItem("userXp");
-            document.getElementById("battle-hp-value").textContent = localStorage.getItem("userHp");
-            document.getElementById("battle-modal").style.display = "flex";
-        }
-
-        // Использовать навык
-        function useSkill(skill) {
-            const hp = parseInt(localStorage.getItem("userHp"));
-            if (hp <= 0) {
-                alert("You are dead!");
-                return;
-            }
-
-            if (skill === "heal") {
-                hp += 20;
-                localStorage.setItem("userHp", hp);
-                document.getElementById("battle-hp-value").textContent = hp;
-                document.getElementById("battle-result").textContent = "Used Heal. HP increased by 20.";
-            } else if (skill === "fireball") {
-                document.getElementById("battle-result").textContent = "Used Fireball. Enemy damaged!";
-            } else if (skill === "slash") {
-                document.getElementById("battle-result").textContent = "Used Slash. Basic Attack!";
-            }
-        }
-
-        // Убежать от боя
-        function runFromBattle() {
-            document.getElementById("battle-result").textContent = "You ran away!";
-            document.getElementById("battle-modal").style.display = "none";
-        }
-
-        // Закрыть бой
-        function endBattle() {
-            document.getElementById("battle-modal").style.display = "none";
-        }
-
-        // Купить предмет
-        function buyItem(item, cost) {
-            let gold = parseInt(localStorage.getItem("userGold")) || 100;
-            if (gold >= cost) {
-                gold -= cost;
-                localStorage.setItem("userGold", gold);
-                addItem(item);
-                document.getElementById("gold-value").textContent = gold;
-                alert("Bought " + item + " for " + cost + " gold.");
-            } else {
-                alert("Not enough gold to buy " + item + ".");
-            }
-        }
-
-        // Обновление профиля при загрузке
-        window.onload = () => {
-            const user = localStorage.getItem("loggedInUser");
-            if (user) {
-                showLoginMessage(user);
-                showProfile();
-                const userClass = localStorage.getItem("userClass");
-                if (userClass) {
-                    initCharacterModel(userClass);
-                }
-            }
-        };
+        });
     </script>
 </body>
 </html>
