@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Perfect World | Next-Gen MMORPG</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <!-- Подключение CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="particles-js"></div>
+        <div class="main-menu">
+            <div class="menu-header">
+                <h1 class="game-logo glow">PERFECT WORLD</h1>
+                <p class="game-subtitle">Next-Generation MMORPG Experience</p>
+            </div>
+            <nav class="menu-nav">
+                <a href="#" class="nav-item">Home</a> 
+                <a href="#" class="nav-item">Classes</a>
+                <a href="#" class="nav-item">World</a>
+                <a href="#" class="nav-item">PvP</a>
+                <a href="#" class="nav-item">Shop</a>
+                <a href="#" class="nav-item">Community</a>
+            </nav>
+            <div class="menu-content">
+                <div class="character-display">
+                    <div class="character-3d">
+                        <!-- Здесь будет 3D-модель персонажа с WebGL -->
+                        <p>3D CHARACTER PREVIEW</p>
+                    </div>
+                </div>
+                <div class="server-info">
+                    <div class="server-status">
+                        <div class="status-title">
+                            <div class="status-indicator"></div>
+                            <span>SERVER STATUS: ONLINE</span>
+                        </div>
+                        <div class="status-details">
+                            <div class="status-item">
+                                Players online: <span>12,845</span>
+                            </div>
+                            <div class="status-item">
+                                New players: <span>328</span>
+                            </div>
+                            <div class="status-item">
+                                PvP battles: <span>1,203</span>
+                            </div>
+                            <div class="status-item">
+                                Dungeons: <span>576</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="news-card">
+                        <h3 class="news-title">LATEST UPDATES</h3>
+                        <div class="news-item">
+                            <div class="news-date">12.05.2023</div>
+                            <div class="news-text">New dungeon "Temple of Forgotten Gods" released</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-date">05.05.2023</div>
+                            <div class="news-text">Season 8 of PvP Arena has begun</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-date">28.04.2023</div>
+                            <div class="news-text">New character class "Stormcaller" available</div>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary">PLAY NOW</button>
+                        <button class="btn btn-secondary">CREATE ACCOUNT</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подключаем библиотеки для эффектов -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script> 
+    <script src="script.js"></script>
+</body>
+</html>
