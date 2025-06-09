@@ -583,9 +583,15 @@
                 return;
             }
 
-            console.log("Registration Attempt:");
-            console.log("Username:", username);
-            console.log("Email:", email);
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert("Invalid email format.");
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            users.push({ username, email });
+            localStorage.setItem('registeredUsers', JSON.stringify(users));
 
             alert("Account created successfully!");
             document.getElementById("username").value = "";
