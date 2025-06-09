@@ -320,7 +320,7 @@
             }
         }
 
-        /* Модальное окно */
+        /* Модальные окна */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -430,13 +430,14 @@
                     <div class="action-buttons">
                         <button class="btn btn-primary">PLAY NOW</button>
                         <button id="toggle-register" class="btn btn-secondary">CREATE ACCOUNT</button>
+                        <button id="toggle-login" class="btn btn-secondary">LOGIN</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Модальное окно -->
-        <div id="modal-overlay" class="modal-overlay">
+        <!-- Модальное окно регистрации -->
+        <div id="register-modal" class="modal-overlay">
             <div class="modal-content">
                 <span class="close-btn">&times;</span>
                 <h3>Register</h3>
@@ -445,6 +446,19 @@
                     <input type="email" id="email" placeholder="Email" required><br>
                     <input type="password" id="password" placeholder="Password" required><br>
                     <button type="submit">Create Account</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Модальное окно логина -->
+        <div id="login-modal" class="modal-overlay">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h3>Login</h3>
+                <form onsubmit="handleLogin(event)">
+                    <input type="text" id="login-username" placeholder="Username" required><br>
+                    <input type="password" id="login-password" placeholder="Password" required><br>
+                    <button type="submit">Login</button>
                 </form>
             </div>
         </div>
@@ -551,23 +565,31 @@
             menu.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         });
 
-        // Обработка кнопки "CREATE ACCOUNT"
-        const toggleBtn = document.getElementById("toggle-register");
-        const modalOverlay = document.getElementById("modal-overlay");
+        // Обработка кнопок
+        const registerBtn = document.getElementById("toggle-register");
+        const loginBtn = document.getElementById("toggle-login");
+        const registerModal = document.getElementById("register-modal");
+        const loginModal = document.getElementById("login-modal");
 
-        toggleBtn.addEventListener("click", () => {
-            modalOverlay.style.display = "flex";
+        registerBtn.addEventListener("click", () => {
+            registerModal.style.display = "flex";
         });
 
-        // Закрытие модального окна по клику на крестик
-        document.querySelector(".close-btn").addEventListener("click", () => {
-            modalOverlay.style.display = "none";
+        loginBtn.addEventListener("click", () => {
+            loginModal.style.display = "flex";
         });
 
-        // Закрытие модального окна по клику вне содержимого
+        // Закрытие модальных окон
+        document.querySelectorAll(".close-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                registerModal.style.display = "none";
+                loginModal.style.display = "none";
+            });
+        });
+
         window.addEventListener("click", (e) => {
-            if (e.target === modalOverlay) {
-                modalOverlay.style.display = "none";
+            if (e.target === registerModal || e.target === loginModal) {
+                e.target.style.display = "none";
             }
         });
 
@@ -591,14 +613,39 @@
             }
 
             const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-            users.push({ username, email });
+            users.push({ username, email, password });
             localStorage.setItem('registeredUsers', JSON.stringify(users));
 
             alert("Account created successfully!");
             document.getElementById("username").value = "";
             document.getElementById("email").value = "";
             document.getElementById("password").value = "";
-            modalOverlay.style.display = "none";
+            registerModal.style.display = "none";
+        }
+
+        // Обработка формы логина
+        function handleLogin(e) {
+            e.preventDefault();
+
+            const username = document.getElementById("login-username").value.trim();
+            const password = document.getElementById("login-password").value.trim();
+
+            if (!username || !password) {
+                alert("Please enter your username and password.");
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const userExists = users.some(user => user.username === username && user.password === password);
+
+            if (userExists) {
+                alert("Login successful!");
+                document.getElementById("login-username").value = "";
+                document.getElementById("login-password").value = "";
+                loginModal.style.display = "none";
+            } else {
+                alert("Invalid username or password.");
+            }
         }
     </script>
 </body>
