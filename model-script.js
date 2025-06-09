@@ -11,7 +11,7 @@ const light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(0, 1, 1).normalize();
 scene.add(light);
 
-// Создаем куб (или позже модель)
+// Простая геометрия - куб
 const geometry = new THREE.BoxGeometry();
 const material = new THREE.MeshStandardMaterial({ color: 0x00f7ff });
 const cube = new THREE.Mesh(geometry, material);
