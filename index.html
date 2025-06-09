@@ -4,11 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Perfect World | Next-Gen MMORPG</title>
-    
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
 
-    <!-- Подключение CSS -->
     <style>
         :root {
             --primary: #00f7ff; 
@@ -291,7 +290,6 @@
             }
         }
 
-        /* Эффекты неонового свечения */
         .glow {
             text-shadow: 0 0 10px currentColor;
         }
@@ -366,6 +364,25 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+
+        /* Профиль */
+        .user-profile {
+            margin-top: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .profile-info {
+            font-size: 1rem;
+            color: var(--light);
+        }
+
+        .profile-level {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -375,6 +392,7 @@
             <div class="menu-header">
                 <h1 class="game-logo glow">PERFECT WORLD</h1>
                 <p class="game-subtitle">Next-Generation MMORPG Experience</p>
+                <p id="login-message" style="margin-top: 1rem;"></p>
             </div>
             <nav class="menu-nav">
                 <a href="#" class="nav-item">Home</a>
@@ -387,7 +405,6 @@
             <div class="menu-content">
                 <div class="character-display">
                     <div class="character-3d">
-                        <!-- Здесь будет 3D-модель персонажа с WebGL -->
                         <p>3D CHARACTER PREVIEW</p>
                     </div>
                 </div>
@@ -461,6 +478,32 @@
                     <button type="submit">Login</button>
                 </form>
             </div>
+        </div>
+
+        <!-- Модальное окно выбора класса -->
+        <div id="class-modal" class="modal-overlay">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h3>Select Class</h3>
+                <form onsubmit="handleClassSelection(event)">
+                    <select id="class-select" required>
+                        <option value="">-- Choose a class --</option>
+                        <option value="warrior">Warrior</option>
+                        <option value="mage">Mage</option>
+                        <option value="ranger">Ranger</option>
+                    </select><br>
+                    <button type="submit">Confirm</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Отображение профиля -->
+        <div class="user-profile" id="user-profile" style="display: none;">
+            <h4>Logged in as:</h4>
+            <p id="profile-username" class="profile-info"></p>
+            <p id="profile-class" class="profile-info"></p>
+            <p id="profile-level" class="profile-level">Level: <span id="level-value">1</span></p>
+            <button onclick="increaseLevel()" class="btn btn-secondary">Increase Level</button>
         </div>
     </div>
 
@@ -570,6 +613,7 @@
         const loginBtn = document.getElementById("toggle-login");
         const registerModal = document.getElementById("register-modal");
         const loginModal = document.getElementById("login-modal");
+        const classModal = document.getElementById("class-modal");
 
         registerBtn.addEventListener("click", () => {
             registerModal.style.display = "flex";
@@ -584,14 +628,42 @@
             btn.addEventListener("click", () => {
                 registerModal.style.display = "none";
                 loginModal.style.display = "none";
+                classModal.style.display = "none";
             });
         });
 
         window.addEventListener("click", (e) => {
-            if (e.target === registerModal || e.target === loginModal) {
+            if (e.target === registerModal || e.target === loginModal || e.target === classModal) {
                 e.target.style.display = "none";
             }
         });
+
+        // Показать сообщение о входе
+        function showLoginMessage(username) {
+            const msg = document.getElementById("login-message");
+            msg.textContent = "Logged in as: " + username;
+        }
+
+        // Показать профиль
+        function showProfile() {
+            const profile = document.getElementById("user-profile");
+            const username = localStorage.getItem("loggedInUser") || "Guest";
+            const userClass = localStorage.getItem("userClass") || "None";
+            const level = parseInt(localStorage.getItem("userLevel")) || 1;
+
+            document.getElementById("profile-username").textContent = username;
+            document.getElementById("profile-class").textContent = "Class: " + userClass;
+            document.getElementById("level-value").textContent = level;
+            profile.style.display = "block";
+        }
+
+        // Увеличить уровень
+        function increaseLevel() {
+            let level = parseInt(localStorage.getItem("userLevel")) || 1;
+            level++;
+            localStorage.setItem("userLevel", level);
+            document.getElementById("level-value").textContent = level;
+        }
 
         // Обработка формы регистрации
         function handleRegistration(e) {
@@ -617,10 +689,11 @@
             localStorage.setItem('registeredUsers', JSON.stringify(users));
 
             alert("Account created successfully!");
+            registerModal.style.display = "none";
+
             document.getElementById("username").value = "";
             document.getElementById("email").value = "";
             document.getElementById("password").value = "";
-            registerModal.style.display = "none";
         }
 
         // Обработка формы логина
@@ -639,14 +712,44 @@
             const userExists = users.some(user => user.username === username && user.password === password);
 
             if (userExists) {
-                alert("Login successful!");
-                document.getElementById("login-username").value = "";
-                document.getElementById("login-password").value = "";
-                loginModal.style.display = "none";
+                localStorage.setItem("loggedInUser", username);
+                localStorage.setItem("userClass", "");
+                localStorage.setItem("userLevel", 1);
+                showLoginMessage(username);
+                showProfile();
+                classModal.style.display = "flex";
             } else {
                 alert("Invalid username or password.");
             }
+
+            document.getElementById("login-username").value = "";
+            document.getElementById("login-password").value = "";
+            loginModal.style.display = "none";
         }
+
+        // Обработка выбора класса
+        function handleClassSelection(e) {
+            e.preventDefault();
+
+            const selectedClass = document.getElementById("class-select").value;
+            if (!selectedClass) {
+                alert("Please select a class.");
+                return;
+            }
+
+            localStorage.setItem("userClass", selectedClass);
+            classModal.style.display = "none";
+            showProfile();
+        }
+
+        // Обновление профиля при загрузке
+        window.onload = () => {
+            const user = localStorage.getItem("loggedInUser");
+            if (user) {
+                showLoginMessage(user);
+                showProfile();
+            }
+        };
     </script>
 </body>
 </html>
