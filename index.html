@@ -136,7 +136,6 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
-            margin-top: 2rem;
         }
 
         .character-display {
@@ -523,8 +522,50 @@
             background: var(--secondary);
         }
 
+        /* Логи боёв */
+        #battle-log-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .battle-log-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 10, 32, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 247, 255, 0.3);
+            backdrop-filter: blur(10px);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .log-entry {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+
         /* 3D модель */
         #character-model {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .enemy-model {
             width: 100%;
             height: 100%;
             background: #000;
@@ -544,17 +585,21 @@
                 <p id="login-message" style="margin-top: 1rem;"></p>
             </div>
             <nav class="menu-nav">
-                <a href="#" class="nav-item">Home</a>
-                <a href="#" class="nav-item">Classes</a>
-                <a href="#" class="nav-item">World</a>
-                <a href="#" class="nav-item">PvP</a>
-                <a href="#" class="nav-item">Shop</a>
-                <a href="#" class="nav-item">Community</a>
+                <a href="#" onclick="showTab('home')" class="nav-item">Home</a>
+                <a href="#" onclick="showTab('classes')" class="nav-item">Classes</a>
+                <a href="#" onclick="showTab('world')" class="nav-item">World</a>
+                <a href="#" onclick="showTab('pvp')" class="nav-item">PvP</a>
+                <a href="#" onclick="showTab('shop')" class="nav-item">Shop</a>
+                <a href="#" onclick="showTab('community')" class="nav-item">Community</a>
+                <a href="#" onclick="showTab('profile')" class="nav-item">Profile</a>
+                <a href="#" onclick="openBattle()" class="nav-item">Battle</a>
+                <a href="#" onclick="showTab('battle-log')" class="nav-item">Battle Log</a>
             </nav>
-            <div class="menu-content">
+
+            <!-- Вкладка Home -->
+            <div id="tab-home" class="menu-content active">
                 <div class="character-display">
                     <div class="character-3d" id="character-model">
-                        <!-- Здесь будет 3D модель -->
                         <p>3D CHARACTER PREVIEW</p>
                     </div>
                 </div>
@@ -598,8 +643,78 @@
                         <button onclick="openBattle()" class="btn btn-primary">PLAY NOW</button>
                         <button id="toggle-register" class="btn btn-secondary">CREATE ACCOUNT</button>
                         <button id="toggle-login" class="btn btn-secondary">LOGIN</button>
-                        <button onclick="openShop()" class="btn btn-secondary">SHOP</button>
                     </div>
+                </div>
+
+                <!-- Вкладка Classes -->
+                <div id="tab-classes" class="menu-content">
+                    <h3>Available Classes</h3>
+                    <ul>
+                        <li><strong>Warrior</strong> – High attack and defense.</li>
+                        <li><strong>Mage</strong> – Strong magic skills and high intelligence.</li>
+                        <li><strong>Ranger</strong> – Fast attacks and good mobility.</li>
+                    </ul>
+                    <button onclick="classModal.style.display = 'flex'" class="btn btn-secondary">Select Class</button>
+                </div>
+
+                <!-- Вкладка World -->
+                <div id="tab-world" class="menu-content">
+                    <h3>World Map</h3>
+                    <p>Welcome to the world of Perfect World! Explore the vast lands filled with quests, enemies, and treasures.</p>
+                    <p>Currently you are in: <span id="current-location">Forest</span></p>
+                    <button onclick="alert('You have moved to a new location!')">Travel</button>
+                </div>
+
+                <!-- Вкладка PvP -->
+                <div id="tab-pvp" class="menu-content">
+                    <h3>PvP Arena</h3>
+                    <p>Compete against other players in real-time battles!</p>
+                    <button onclick="alert('Arena is currently under maintenance.')">Enter Arena</button>
+                </div>
+
+                <!-- Вкладка Shop -->
+                <div id="tab-shop" class="menu-content">
+                    <h3>Shop</h3>
+                    <p>Buy items and equipment to help you on your journey.</p>
+                    <button onclick="shopModal.style.display = 'flex'">Open Shop</button>
+                </div>
+
+                <!-- Вкладка Community -->
+                <div id="tab-community" class="menu-content">
+                    <h3>Community</h3>
+                    <p>Join our community to chat with other players, share tips, and more!</p>
+                    <button onclick="alert('Community is coming soon.')">Join Now</button>
+                </div>
+
+                <!-- Вкладка Profile -->
+                <div id="tab-profile" class="menu-content">
+                    <h3>Your Profile</h3>
+                    <div class="user-profile" id="user-profile">
+                        <h4>Logged in as:</h4>
+                        <p id="profile-username" class="profile-info"></p>
+                        <p id="profile-class" class="profile-info"></p>
+                        <div class="profile-stats">
+                            <div class="stat-line">Level: <span id="level-value">1</span></div>
+                            <div class="stat-line">XP: <span id="xp-value">0</span></div>
+                            <div class="stat-line">HP: <span id="hp-value">100</span></div>
+                            <div class="stat-line">Attack: <span id="attack-value">10</span></div>
+                            <div class="stat-line">Defense: <span id="defense-value">5</span></div>
+                            <div class="stat-line">Gold: <span id="gold-value">100</span></div>
+                        </div>
+                        <div class="inventory-list" id="inventory-list"></div>
+                        <button onclick="addItem('Sword')" class="add-inventory-btn">Add Sword</button>
+                        <button onclick="addItem('Shield')" class="add-inventory-btn">Add Shield</button>
+                        <button onclick="addItem('Potion')" class="add-inventory-btn">Add Potion</button>
+                        <button onclick="removeItem('Sword')" class="add-inventory-btn">Remove Sword</button>
+                        <button onclick="removeItem('Shield')" class="add-inventory-btn">Remove Shield</button>
+                        <button onclick="removeItem('Potion')" class="add-inventory-btn">Remove Potion</button>
+                    </div>
+                </div>
+
+                <!-- Вкладка Battle Log -->
+                <div id="tab-battle-log" class="menu-content">
+                    <h3>Battle Logs</h3>
+                    <div id="battle-logs" class="inventory-list"></div>
                 </div>
             </div>
         </div>
@@ -648,24 +763,6 @@
             </div>
         </div>
 
-        <!-- Модальное окно боя -->
-        <div id="battle-modal" class="modal-overlay">
-            <div class="battle-content">
-                <span class="close-btn">&times;</span>
-                <h3>Battle Interface</h3>
-                <p id="battle-hp">HP: <span id="battle-hp-value">100</span></p>
-                <p id="battle-level">Level: <span id="battle-level-value">1</span></p>
-                <p id="battle-class">Class: <span id="battle-class-value">None</span></p>
-                <div class="skills-list">
-                    <button onclick="useSkill('fireball')" class="skill-btn">Fireball</button>
-                    <button onclick="useSkill('heal')" class="skill-btn">Heal</button>
-                    <button onclick="useSkill('slash')" class="skill-btn">Slash</button>
-                </div>
-                <p id="battle-result" style="margin-top: 1rem;"></p>
-                <button onclick="endBattle()" class="btn btn-secondary">End Battle</button>
-            </div>
-        </div>
-
         <!-- Модальное окно магазина -->
         <div id="shop-modal" class="modal-overlay">
             <div class="shop-content">
@@ -690,25 +787,33 @@
             </div>
         </div>
 
-        <!-- Отображение профиля -->
-        <div class="user-profile" id="user-profile">
-            <h4>Logged in as:</h4>
-            <p id="profile-username" class="profile-info"></p>
-            <p id="profile-class" class="profile-info"></p>
-            <div class="profile-stats">
-                <div class="stat-line">Level: <span id="level-value">1</span></div>
-                <div class="stat-line">HP: <span id="hp-value">100</span></div>
-                <div class="stat-line">Attack: <span id="attack-value">10</span></div>
-                <div class="stat-line">Defense: <span id="defense-value">5</span></div>
-                <div class="stat-line">Gold: <span id="gold-value-profile">100</span></div>
+        <!-- Модальное окно боя -->
+        <div id="battle-modal" class="modal-overlay">
+            <div class="battle-content">
+                <span class="close-btn">&times;</span>
+                <h3>Battle Interface</h3>
+                <p id="battle-hp">HP: <span id="battle-hp-value">100</span></p>
+                <p id="battle-level">Level: <span id="battle-level-value">1</span></p>
+                <p id="battle-xp">XP: <span id="battle-xp-value">0</span></p>
+                <p id="battle-class">Class: <span id="battle-class-value">None</span></p>
+                <p id="battle-result" style="margin-top: 1rem;"></p>
+                <div class="skills-list">
+                    <button onclick="useSkill('fireball')" class="skill-btn">Fireball</button>
+                    <button onclick="useSkill('heal')" class="skill-btn">Heal</button>
+                    <button onclick="useSkill('slash')" class="skill-btn">Slash</button>
+                    <button onclick="runFromBattle()">Run</button>
+                </div>
+                <button onclick="endBattle()" class="btn btn-secondary">End Battle</button>
             </div>
-            <div class="inventory-list" id="inventory-list"></div>
-            <button onclick="addItem('Sword')" class="add-inventory-btn">Add Sword</button>
-            <button onclick="addItem('Shield')" class="add-inventory-btn">Add Shield</button>
-            <button onclick="addItem('Potion')" class="add-inventory-btn">Add Potion</button>
-            <button onclick="removeItem('Sword')" class="add-inventory-btn">Remove Sword</button>
-            <button onclick="removeItem('Shield')" class="add-inventory-btn">Remove Shield</button>
-            <button onclick="removeItem('Potion')" class="add-inventory-btn">Remove Potion</button>
+        </div>
+
+        <!-- Модальное окно логов -->
+        <div id="battle-log-modal" class="modal-overlay">
+            <div class="battle-log-content">
+                <span class="close-btn">&times;</span>
+                <h3>Battle Logs</h3>
+                <div id="battle-logs" class="inventory-list"></div>
+            </div>
         </div>
     </div>
 
@@ -815,12 +920,20 @@
             menu.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         });
 
+        // Показать вкладку
+        function showTab(tabId) {
+            document.querySelectorAll('[id^="tab-"]').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+        }
+
         // Обработка кнопок
         const registerBtn = document.getElementById("toggle-register");
         const loginBtn = document.getElementById("toggle-login");
         const registerModal = document.getElementById("register-modal");
         const loginModal = document.getElementById("login-modal");
         const classModal = document.getElementById("class-modal");
+        const shopModal = document.getElementById("shop-modal");
+        const battleLogModal = document.getElementById("battle-log-modal");
 
         registerBtn.addEventListener("click", () => {
             registerModal.style.display = "flex";
@@ -831,7 +944,7 @@
         });
 
         window.addEventListener("click", (e) => {
-            if (e.target === registerModal || e.target === loginModal || e.target === classModal || e.target === battleModal || e.target === shopModal) {
+            if (e.target === registerModal || e.target === loginModal || e.target === classModal || e.target === shopModal || e.target === battleLogModal) {
                 e.target.style.display = "none";
             }
         });
@@ -848,6 +961,7 @@
             const username = localStorage.getItem("loggedInUser") || "Guest";
             const userClass = localStorage.getItem("userClass") || "None";
             const level = parseInt(localStorage.getItem("userLevel")) || 1;
+            const xp = parseInt(localStorage.getItem("userXp")) || 0;
             const hp = parseInt(localStorage.getItem("userHp")) || 100;
             const attack = parseInt(localStorage.getItem("userAttack")) || 10;
             const defense = parseInt(localStorage.getItem("userDefense")) || 5;
@@ -856,10 +970,11 @@
             document.getElementById("profile-username").textContent = username;
             document.getElementById("profile-class").textContent = "Class: " + userClass;
             document.getElementById("level-value").textContent = level;
+            document.getElementById("xp-value").textContent = xp;
             document.getElementById("hp-value").textContent = hp;
             document.getElementById("attack-value").textContent = attack;
             document.getElementById("defense-value").textContent = defense;
-            document.getElementById("gold-value-profile").textContent = gold;
+            document.getElementById("gold-value").textContent = gold;
 
             const inventoryList = document.getElementById("inventory-list");
             inventoryList.innerHTML = "";
@@ -875,11 +990,19 @@
         }
 
         // Увеличить уровень
-        function increaseLevel() {
+        function increaseLevel(xpEarned) {
             let level = parseInt(localStorage.getItem("userLevel")) || 1;
-            level++;
+            let xp = parseInt(localStorage.getItem("userXp")) || 0;
+            xp += xpEarned;
+            if (xp >= level * 100) {
+                level++;
+                xp -= level * 100;
+                alert(`You leveled up to Level ${level}!`);
+            }
             localStorage.setItem("userLevel", level);
+            localStorage.setItem("userXp", xp);
             document.getElementById("level-value").textContent = level;
+            document.getElementById("xp-value").textContent = xp;
         }
 
         // Добавить предмет
@@ -957,6 +1080,7 @@
                 localStorage.setItem("loggedInUser", username);
                 localStorage.setItem("userClass", "");
                 localStorage.setItem("userLevel", 1);
+                localStorage.setItem("userXp", 0);
                 localStorage.setItem("userHp", 100);
                 localStorage.setItem("userAttack", 10);
                 localStorage.setItem("userDefense", 5);
@@ -1050,6 +1174,7 @@
 
             document.getElementById("battle-class-value").textContent = userClass;
             document.getElementById("battle-level-value").textContent = localStorage.getItem("userLevel");
+            document.getElementById("battle-xp-value").textContent = localStorage.getItem("userXp");
             document.getElementById("battle-hp-value").textContent = localStorage.getItem("userHp");
             document.getElementById("battle-modal").style.display = "flex";
         }
@@ -1074,21 +1199,15 @@
             }
         }
 
-        // Закрыть бой
-        function endBattle() {
+        // Убежать от боя
+        function runFromBattle() {
+            document.getElementById("battle-result").textContent = "You ran away!";
             document.getElementById("battle-modal").style.display = "none";
         }
 
-        // Открыть магазин
-        function openShop() {
-            const user = localStorage.getItem("loggedInUser");
-            if (!user) {
-                alert("You must be logged in to access the shop.");
-                return;
-            }
-
-            document.getElementById("gold-value").textContent = localStorage.getItem("userGold");
-            document.getElementById("shop-modal").style.display = "flex";
+        // Закрыть бой
+        function endBattle() {
+            document.getElementById("battle-modal").style.display = "none";
         }
 
         // Купить предмет
