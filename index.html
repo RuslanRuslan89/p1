@@ -24,231 +24,123 @@
             font-family: 'Rajdhani', sans-serif;
             background-color: var(--darker);
             color: var(--light);
-            height: auto;
-            min-height: 100vh;
+            scroll-behavior: smooth;
             overflow-x: hidden;
         }
 
-        #game-container {
-            position: relative;
-            width: 100%;
-            padding: 2rem 1rem;
-            display: flex;
-            justify-content: center;
-            align-items: start;
-        }
-
-        #particles-js {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
-        .main-menu {
-            position: relative;
-            z-index: 10;
-            width: 90%;
-            max-width: 1200px;
-            padding: 2rem;
-            background: rgba(10, 10, 32, 0.7);
-            border-radius: 20px;
-            border: 1px solid rgba(0, 247, 255, 0.3);
-            box-shadow: 0 0 50px rgba(0, 247, 255, 0.1),
-                        inset 0 0 20px rgba(0, 247, 255, 0.1);
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background-color: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
-            transform-style: preserve-3d;
-            animation: float 6s ease-in-out infinite;
-            margin-top: 100px;
-            margin-bottom: 100px;
-        }
-
-        .menu-header {
-            text-align: center;
-            margin-bottom: 3rem;
-            position: relative;
-        }
-
-        .game-logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 4rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 20px rgba(0, 247, 255, 0.3);
-            margin-bottom: 1rem;
-            letter-spacing: 5px;
-        }
-
-        .game-subtitle {
-            font-size: 1.2rem;
-            letter-spacing: 3px;
-            color: var(--primary);
-            text-transform: uppercase;
-        }
-
-        .menu-nav {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .nav-item {
-            position: relative;
             padding: 1rem 2rem;
-            font-size: 1.2rem;
-            font-weight: 500;
-            color: var(--light);
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .nav-item:hover {
-            color: var(--primary);
-            transform: translateY(-5px);
-        }
-
-        .nav-item::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 2px;
-            background: var(--primary);
-            transition: width 0.3s ease;
-        }
-
-        .nav-item:hover::after {
-            width: 80%;
-        }
-
-        .menu-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-
-        .character-display {
-            position: relative;
-            height: 400px;
-            border-radius: 15px;
-            overflow: hidden;
-            border: 1px solid rgba(0, 247, 255, 0.3);
-            box-shadow: 0 0 30px rgba(0, 247, 255, 0.1);
-        }
-
-        .character-3d {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(0, 247, 255, 0.1), rgba(255, 0, 170, 0.1));
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.5);
         }
 
-        .server-info {
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        nav ul {
+            list-style: none;
             display: flex;
-            flex-direction: column;
             gap: 1.5rem;
         }
 
-        .server-status {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 1.5rem;
-            border-left: 4px solid var(--primary);
-        }
-
-        .status-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-            color: var(--primary);
-        }
-
-        .status-indicator {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #0f0;
-            box-shadow: 0 0 10px #0f0;
-        }
-
-        .status-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        .status-item {
-            font-size: 0.9rem;
-        }
-
-        .status-item span {
-            color: var(--primary);
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            transition: all 0.3s ease;
             font-weight: 500;
         }
 
-        .news-card {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 1.5rem;
-            border-left: 4px solid var(--secondary);
+        nav a:hover {
+            color: var(--primary);
         }
 
-        .news-title {
-            font-size: 1.1rem;
+        section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        #hero {
+            background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb'); 
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #features {
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            padding: 4rem 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature {
+            background: rgba(10, 10, 32, 0.7);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature h3 {
             margin-bottom: 1rem;
-            color: var(--secondary);
+            color: var(--primary);
+        }
+
+        #news {
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            padding: 4rem 2rem;
         }
 
         .news-item {
+            margin-bottom: 2rem;
             display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .news-item:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
         .news-date {
-            font-size: 0.8rem;
-            color: var(--primary);
-            min-width: 70px;
-        }
-
-        .news-text {
             font-size: 0.9rem;
+            color: var(--secondary);
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
+        #cta {
+            background-color: var(--dark);
+            border-radius: 20px;
+            padding: 4rem 2rem;
+            text-align: center;
         }
 
         .btn {
             padding: 1rem 2rem;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -256,19 +148,15 @@
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
 
         .btn-primary {
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             color: var(--darker);
-            box-shadow: 0 0 20px rgba(0, 247, 255, 0.3);
         }
 
         .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0 30px rgba(0, 247, 255, 0.5);
+            transform: scale(1.05);
         }
 
         .btn-secondary {
@@ -278,8 +166,15 @@
         }
 
         .btn-secondary:hover {
-            background: rgba(0, 247, 255, 0.1);
-            transform: translateY(-3px);
+            background: var(--primary);
+            color: var(--darker);
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+            }
         }
 
         @keyframes float {
@@ -295,99 +190,74 @@
         .glow {
             text-shadow: 0 0 10px currentColor;
         }
-
-        /* Адаптивность */
-        @media (max-width: 992px) {
-            .menu-content {
-                grid-template-columns: 1fr;
-            }
-            .game-logo {
-                font-size: 3rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .menu-nav {
-                flex-direction: column;
-                align-items: center;
-                gap: 1rem;
-            }
-            .action-buttons {
-                flex-direction: column;
-            }
-            .game-logo {
-                font-size: 2.5rem;
-            }
-        }
     </style>
 </head>
 <body>
-    <div id="game-container">
-        <div id="particles-js"></div>
-        <div class="main-menu">
-            <div class="menu-header">
-                <h1 class="game-logo glow">PERFECT WORLD</h1>
-                <p class="game-subtitle">Next-Generation MMORPG Experience</p>
-            </div>
-            <nav class="menu-nav">
-                <a href="#" class="nav-item">Home</a>
-                <a href="#" class="nav-item">Classes</a>
-                <a href="#" class="nav-item">World</a>
-                <a href="#" class="nav-item">PvP</a>
-                <a href="#" class="nav-item">Shop</a>
-                <a href="#" class="nav-item">Community</a>
-            </nav>
-            <div class="menu-content">
-                <div class="character-display">
-                    <div class="character-3d">
-                        <!-- Здесь будет 3D-модель персонажа с WebGL -->
-                        <p>3D CHARACTER PREVIEW</p>
-                    </div>
-                </div>
-                <div class="server-info">
-                    <div class="server-status">
-                        <div class="status-title">
-                            <div class="status-indicator"></div>
-                            <span>SERVER STATUS: ONLINE</span>
-                        </div>
-                        <div class="status-details">
-                            <div class="status-item">
-                                Players online: <span>12,845</span>
-                            </div>
-                            <div class="status-item">
-                                New players: <span>328</span>
-                            </div>
-                            <div class="status-item">
-                                PvP battles: <span>1,203</span>
-                            </div>
-                            <div class="status-item">
-                                Dungeons: <span>576</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="news-card">
-                        <h3 class="news-title">LATEST UPDATES</h3>
-                        <div class="news-item">
-                            <div class="news-date">12.05.2023</div>
-                            <div class="news-text">New dungeon "Temple of Forgotten Gods" released</div>
-                        </div>
-                        <div class="news-item">
-                            <div class="news-date">05.05.2023</div>
-                            <div class="news-text">Season 8 of PvP Arena has begun</div>
-                        </div>
-                        <div class="news-item">
-                            <div class="news-date">28.04.2023</div>
-                            <div class="news-text">New character class "Stormcaller" available</div>
-                        </div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="btn btn-primary">PLAY NOW</button>
-                        <button class="btn btn-secondary">CREATE ACCOUNT</button>
-                    </div>
-                </div>
-            </div>
+
+    <!-- Шапка -->
+    <header>
+        <div class="logo">PERFECT WORLD</div>
+        <nav>
+            <ul>
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#news">News</a></li>
+                <li><a href="#cta">Get Started</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Раздел 1: Герой -->
+    <section id="hero">
+        <h1 class="glow">Welcome to Perfect World</h1>
+        <p>Next-Generation Online RPG Experience</p>
+        <button class="btn btn-primary glow" onclick="window.location.href='#cta'">Start Your Journey</button>
+    </section>
+
+    <!-- Раздел 2: Фичи -->
+    <section id="features">
+        <div class="feature">
+            <h3>World of Magic</h3>
+            <p>Explore a vast world filled with magic, creatures, and ancient ruins.</p>
         </div>
-    </div>
+        <div class="feature">
+            <h3>Player vs Player</h3>
+            <p>Compete in epic PvP battles for glory and rewards.</p>
+        </div>
+        <div class="feature">
+            <h3>Custom Classes</h3>
+            <p>Create your own character class and customize it as you level up.</p>
+        </div>
+        <div class="feature">
+            <h3>Dynamic Quests</h3>
+            <p>Experience quests that change based on your choices and actions.</p>
+        </div>
+    </section>
+
+    <!-- Раздел 3: Новости -->
+    <section id="news">
+        <h2 class="glow">Latest Updates</h2>
+        <div class="news-item">
+            <div class="news-date">12.05.2023</div>
+            <div class="news-text">New dungeon "Temple of Forgotten Gods" released</div>
+        </div>
+        <div class="news-item">
+            <div class="news-date">05.05.2023</div>
+            <div class="news-text">Season 8 of PvP Arena has begun</div>
+        </div>
+        <div class="news-item">
+            <div class="news-date">28.04.2023</div>
+            <div class="news-text">New character class "Stormcaller" available</div>
+        </div>
+    </section>
+
+    <!-- Раздел 4: Призыв к действию -->
+    <section id="cta">
+        <h2 class="glow">Ready to Play?</h2>
+        <p>Join thousands of players and start your adventure today.</p>
+        <button class="btn btn-primary glow">Play Now</button>
+        <button class="btn btn-secondary glow">Create Account</button>
+    </section>
 
     <!-- Подключаем библиотеки для эффектов -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script> 
@@ -485,9 +355,11 @@
         // Параллакс эффект для меню
         document.addEventListener('mousemove', (e) => {
             const menu = document.querySelector('.main-menu');
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-            menu.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            if (menu) {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+                menu.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            }
         });
 
         // Анимация кнопок
