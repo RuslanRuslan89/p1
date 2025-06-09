@@ -25,7 +25,6 @@
             background-color: var(--darker);
             color: var(--light);
             scroll-behavior: smooth;
-            overflow-x: hidden;
         }
 
         header {
@@ -117,18 +116,35 @@
             border-radius: 20px;
             backdrop-filter: blur(10px);
             padding: 4rem 2rem;
+            overflow: hidden;
         }
 
-        .news-item {
-            margin-bottom: 2rem;
+        .carousel {
             display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
+            overflow-x: hidden;
+            scroll-snap-type: x mandatory;
+            gap: 2rem;
+            width: 100%;
+        }
+
+        .slide {
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid var(--secondary);
+            padding: 2rem;
+            border-radius: 10px;
+            min-width: 300px;
         }
 
         .news-date {
             font-size: 0.9rem;
-            color: var(--secondary);
+            color: var(--primary);
+            min-width: 70px;
+        }
+
+        .news-text {
+            font-size: 0.9rem;
         }
 
         #cta {
@@ -170,6 +186,80 @@
             color: var(--darker);
         }
 
+        /* Модальное окно */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 10, 32, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 247, 255, 0.3);
+            backdrop-filter: blur(10px);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--secondary);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Форма регистрации */
+        form input,
+        form button {
+            display: block;
+            width: 100%;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            font-size: 1rem;
+        }
+
+        form input {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--light);
+        }
+
+        form button {
+            background: var(--primary);
+            color: var(--darker);
+            border: none;
+        }
+
+        form button:hover {
+            background: var(--secondary);
+        }
+
+        /* Адаптивность */
         @media (max-width: 768px) {
             nav ul {
                 flex-direction: column;
@@ -186,9 +276,16 @@
             }
         }
 
-        /* Эффекты неонового свечения */
         .glow {
             text-shadow: 0 0 10px currentColor;
+        }
+
+        /* 3D модель */
+        #character-model {
+            width: 100%;
+            height: 400px;
+            background: #000;
+            margin-top: 2rem;
         }
     </style>
 </head>
@@ -211,10 +308,10 @@
     <section id="hero">
         <h1 class="glow">Welcome to Perfect World</h1>
         <p>Next-Generation Online RPG Experience</p>
-        <button class="btn btn-primary glow" onclick="window.location.href='#cta'">Start Your Journey</button>
+        <button class="btn btn-primary glow" onclick="document.getElementById('register-modal').style.display = 'flex'">Create Account</button>
     </section>
 
-    <!-- Раздел 2: Фичи -->
+    <!-- Раздел 2: Особенности -->
     <section id="features">
         <div class="feature">
             <h3>World of Magic</h3>
@@ -234,20 +331,26 @@
         </div>
     </section>
 
-    <!-- Раздел 3: Новости -->
+    <!-- Раздел 3: Новости (с каруселью) -->
     <section id="news">
         <h2 class="glow">Latest Updates</h2>
-        <div class="news-item">
-            <div class="news-date">12.05.2023</div>
-            <div class="news-text">New dungeon "Temple of Forgotten Gods" released</div>
-        </div>
-        <div class="news-item">
-            <div class="news-date">05.05.2023</div>
-            <div class="news-text">Season 8 of PvP Arena has begun</div>
-        </div>
-        <div class="news-item">
-            <div class="news-date">28.04.2023</div>
-            <div class="news-text">New character class "Stormcaller" available</div>
+        <div class="carousel" id="news-carousel">
+            <div class="slide">
+                <div class="news-date">12.05.2023</div>
+                <div class="news-text">New dungeon "Temple of Forgotten Gods" released</div>
+            </div>
+            <div class="slide">
+                <div class="news-date">05.05.2023</div>
+                <div class="news-text">Season 8 of PvP Arena has begun</div>
+            </div>
+            <div class="slide">
+                <div class="news-date">28.04.2023</div>
+                <div class="news-text">New character class "Stormcaller" available</div>
+            </div>
+            <div class="slide">
+                <div class="news-date">01.05.2023</div>
+                <div class="news-text">New event "Celestial Tournament" is live now!</div>
+            </div>
         </div>
     </section>
 
@@ -256,11 +359,33 @@
         <h2 class="glow">Ready to Play?</h2>
         <p>Join thousands of players and start your adventure today.</p>
         <button class="btn btn-primary glow">Play Now</button>
-        <button class="btn btn-secondary glow">Create Account</button>
+        <button class="btn btn-secondary glow" onclick="document.getElementById('register-modal').style.display = 'flex'">Create Account</button>
     </section>
 
-    <!-- Подключаем библиотеки для эффектов -->
+    <!-- Модальное окно регистрации -->
+    <div id="register-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>Register</h3>
+            <form onsubmit="handleRegistration(event)">
+                <input type="text" id="username" placeholder="Username" required><br>
+                <input type="email" id="email" placeholder="Email" required><br>
+                <input type="password" id="password" placeholder="Password" required><br>
+                <button type="submit">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3D модель персонажа -->
+    <section id="character-section">
+        <h2 class="glow">Character Preview</h2>
+        <div id="character-model"></div>
+    </section>
+
+    <!-- Подключаем библиотеки -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/examples/js/controls/OrbitControls.min.js"></script> 
     <script>
         // Инициализация частиц фона
         particlesJS('particles-js', {
@@ -362,16 +487,106 @@
             }
         });
 
-        // Анимация кнопок
-        const buttons = document.querySelectorAll('.btn');
-        buttons.forEach(button => {
-            button.addEventListener('mouseenter', () => {
-                button.classList.add('glow');
-            });
-            button.addEventListener('mouseleave', () => {
-                button.classList.remove('glow');
-            });
+        // Контролы для карусели
+        let currentIndex = 0;
+
+        function showSlide(index) {
+            const slides = document.querySelectorAll(".slide");
+            const totalSlides = slides.length;
+            index = (index + totalSlides) % totalSlides;
+            document.getElementById("news-carousel").scrollLeft = slides[index].offsetLeft;
+        }
+
+        setInterval(() => {
+            showSlide(currentIndex + 1);
+            currentIndex++;
+        }, 5000);
+
+        // Обработка формы регистрации
+        function handleRegistration(e) {
+            e.preventDefault();
+
+            const username = document.getElementById("username").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+
+            if (!username || !email || !password) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert("Invalid email format.");
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            users.push({ username, email, password });
+            localStorage.setItem('registeredUsers', JSON.stringify(users));
+
+            alert("Account created successfully!");
+            document.getElementById("register-modal").style.display = "none";
+        }
+
+        // Закрытие модального окна
+        document.querySelector("#register-modal .close-btn").addEventListener("click", () => {
+            document.getElementById("register-modal").style.display = "none";
         });
+
+        window.addEventListener("click", (e) => {
+            if (e.target === document.getElementById("register-modal")) {
+                e.target.style.display = "none";
+            }
+        });
+
+        // Инициализация 3D модели
+        function initCharacterModel() {
+            const modelContainer = document.getElementById("character-model");
+            modelContainer.innerHTML = "";
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            modelContainer.appendChild(renderer.domElement);
+
+            const geometry = new THREE.BoxGeometry();
+            const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+            const cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+
+            const light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(0, 1, 1).normalize();
+            scene.add(light);
+
+            camera.position.z = 5;
+
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+                controls.update();
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // Запуск 3D модели при загрузке страницы
+        window.onload = () => {
+            initCharacterModel();
+        };
     </script>
 </body>
 </html>
