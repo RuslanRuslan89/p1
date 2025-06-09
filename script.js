@@ -106,3 +106,25 @@ buttons.forEach(button => {
         button.classList.remove('glow');
     });
 });
+// Обработка формы регистрации
+document.getElementById('register-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const username = document.getElementById('username').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    // Простая проверка (можно расширить)
+    if (!username || !email || !password) {
+        alert("Please fill in all fields.");
+        return;
+    }
+
+    // Вывод в консоль (для тестирования)
+    console.log("Registration Attempt:");
+    console.log("Username:", username);
+    console.log("Email:", email);
+
+    alert("Account created successfully!");
+    this.reset(); // Сброс формы
+});
