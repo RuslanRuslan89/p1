@@ -372,16 +372,60 @@
             border-radius: 10px;
             padding: 1rem;
             border-left: 4px solid var(--primary);
+            display: none;
         }
 
         .profile-info {
             font-size: 1rem;
             color: var(--light);
+            margin-top: 0.5rem;
         }
 
-        .profile-level {
-            margin-top: 0.5rem;
+        .profile-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-line {
             font-size: 0.9rem;
+        }
+
+        .inventory-list {
+            margin-top: 1rem;
+        }
+
+        .inventory-item {
+            display: inline-block;
+            margin: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+
+        .add-inventory-btn {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--primary);
+            color: var(--darker);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-inventory-btn:hover {
+            background: var(--secondary);
+        }
+
+        /* 3D модель */
+        #character-model {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     </style>
 </head>
@@ -404,7 +448,8 @@
             </nav>
             <div class="menu-content">
                 <div class="character-display">
-                    <div class="character-3d">
+                    <div class="character-3d" id="character-model">
+                        <!-- Здесь будет 3D модель -->
                         <p>3D CHARACTER PREVIEW</p>
                     </div>
                 </div>
@@ -497,18 +542,31 @@
             </div>
         </div>
 
-        <!-- Отображение профиля -->
-        <div class="user-profile" id="user-profile" style="display: none;">
+        <!-- Профиль пользователя -->
+        <div class="user-profile" id="user-profile">
             <h4>Logged in as:</h4>
             <p id="profile-username" class="profile-info"></p>
             <p id="profile-class" class="profile-info"></p>
-            <p id="profile-level" class="profile-level">Level: <span id="level-value">1</span></p>
-            <button onclick="increaseLevel()" class="btn btn-secondary">Increase Level</button>
+            <div class="profile-stats">
+                <div class="stat-line">Level: <span id="level-value">1</span></div>
+                <div class="stat-line">HP: <span id="hp-value">100</span></div>
+                <div class="stat-line">Attack: <span id="attack-value">10</span></div>
+                <div class="stat-line">Defense: <span id="defense-value">5</span></div>
+            </div>
+            <div class="inventory-list" id="inventory-list"></div>
+            <button onclick="addItem('Sword')" class="add-inventory-btn">Add Sword</button>
+            <button onclick="addItem('Shield')" class="add-inventory-btn">Add Shield</button>
+            <button onclick="addItem('Potion')" class="add-inventory-btn">Add Potion</button>
+            <button onclick="removeItem('Sword')" class="add-inventory-btn">Remove Sword</button>
+            <button onclick="removeItem('Shield')" class="add-inventory-btn">Remove Shield</button>
+            <button onclick="removeItem('Potion')" class="add-inventory-btn">Remove Potion</button>
         </div>
     </div>
 
-    <!-- Подключаем библиотеки для эффектов -->
+    <!-- Подключаем библиотеки -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/examples/js/controls/OrbitControls.min.js"></script> 
     <script>
         // Инициализация частиц фона
         particlesJS('particles-js', {
@@ -650,10 +708,27 @@
             const username = localStorage.getItem("loggedInUser") || "Guest";
             const userClass = localStorage.getItem("userClass") || "None";
             const level = parseInt(localStorage.getItem("userLevel")) || 1;
+            const hp = parseInt(localStorage.getItem("userHp")) || 100;
+            const attack = parseInt(localStorage.getItem("userAttack")) || 10;
+            const defense = parseInt(localStorage.getItem("userDefense")) || 5;
 
             document.getElementById("profile-username").textContent = username;
             document.getElementById("profile-class").textContent = "Class: " + userClass;
             document.getElementById("level-value").textContent = level;
+            document.getElementById("hp-value").textContent = hp;
+            document.getElementById("attack-value").textContent = attack;
+            document.getElementById("defense-value").textContent = defense;
+
+            const inventoryList = document.getElementById("inventory-list");
+            inventoryList.innerHTML = "";
+            const items = JSON.parse(localStorage.getItem("userInventory") || "[]");
+            items.forEach(item => {
+                const itemDiv = document.createElement("div");
+                itemDiv.className = "inventory-item";
+                itemDiv.textContent = item;
+                inventoryList.appendChild(itemDiv);
+            });
+
             profile.style.display = "block";
         }
 
@@ -663,6 +738,31 @@
             level++;
             localStorage.setItem("userLevel", level);
             document.getElementById("level-value").textContent = level;
+        }
+
+        // Добавить предмет
+        function addItem(item) {
+            let inventory = JSON.parse(localStorage.getItem("userInventory") || "[]");
+            if (!inventory.includes(item)) {
+                inventory.push(item);
+                localStorage.setItem("userInventory", JSON.stringify(inventory));
+                showProfile();
+            } else {
+                alert(item + " is already in your inventory.");
+            }
+        }
+
+        // Удалить предмет
+        function removeItem(item) {
+            let inventory = JSON.parse(localStorage.getItem("userInventory") || "[]");
+            const index = inventory.indexOf(item);
+            if (index !== -1) {
+                inventory.splice(index, 1);
+                localStorage.setItem("userInventory", JSON.stringify(inventory));
+                showProfile();
+            } else {
+                alert(item + " not found in your inventory.");
+            }
         }
 
         // Обработка формы регистрации
@@ -715,6 +815,10 @@
                 localStorage.setItem("loggedInUser", username);
                 localStorage.setItem("userClass", "");
                 localStorage.setItem("userLevel", 1);
+                localStorage.setItem("userHp", 100);
+                localStorage.setItem("userAttack", 10);
+                localStorage.setItem("userDefense", 5);
+                localStorage.setItem("userInventory", JSON.stringify([]));
                 showLoginMessage(username);
                 showProfile();
                 classModal.style.display = "flex";
@@ -738,8 +842,52 @@
             }
 
             localStorage.setItem("userClass", selectedClass);
+            initCharacterModel(selectedClass);
             classModal.style.display = "none";
             showProfile();
+        }
+
+        // Инициализация 3D модели
+        function initCharacterModel(classType) {
+            const modelContainer = document.getElementById("character-model");
+            modelContainer.innerHTML = "";
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            modelContainer.appendChild(renderer.domElement);
+
+            const geometry = new THREE.BoxGeometry();
+            const material = new THREE.MeshStandardMaterial({ color: classType === "warrior" ? 0xff0000 : classType === "mage" ? 0x0000ff : 0x00ff00 });
+            const cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+
+            const light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(0, 1, 1).normalize();
+            scene.add(light);
+
+            camera.position.z = 5;
+
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+                controls.update();
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
         }
 
         // Обновление профиля при загрузке
@@ -748,6 +896,10 @@
             if (user) {
                 showLoginMessage(user);
                 showProfile();
+                const userClass = localStorage.getItem("userClass");
+                if (userClass) {
+                    initCharacterModel(userClass);
+                }
             }
         };
     </script>
