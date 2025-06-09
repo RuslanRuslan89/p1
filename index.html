@@ -27,12 +27,11 @@
                 <a href="#" class="nav-item">Shop</a>
                 <a href="#" class="nav-item">Community</a>
             </nav>
-            <div class="menu-content">
-                <div class="character-display">
-                    <div class="character-3d">
-                        <!-- Здесь будет 3D-модель персонажа с WebGL -->
-                        <p>3D CHARACTER PREVIEW</p>
-                    </div>
+           <div class="character-display">
+    <div class="character-3d" id="character-model">
+        <!-- 3D модель будет отображаться здесь -->
+    </div>
+</div>
                 </div>
                 <div class="server-info">
                     <div class="server-status">
@@ -78,10 +77,6 @@
             </div>
         </div>
     </div>
-    <!-- Внутри div.character-display -->
-<div class="character-3d" id="character-model">
-    <!-- 3D модель будет отображаться здесь -->
-</div>
 
     <!-- Подключаем библиотеки для эффектов -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script> 
