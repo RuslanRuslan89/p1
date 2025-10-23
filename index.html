@@ -1,550 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfect World | Next-Gen MMORPG</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #00f7ff; 
-            --secondary: #ff00aa;
-            --dark: #0a0a20;
-            --darker: #050510;
-            --light: #e0e0ff;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background-color: var(--darker);
-            color: var(--light);
-            overflow: hidden;
-            height: 100vh;
-            perspective: 1000px;
-        }
-
-        #game-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #particles-js {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
-        .main-menu {
-            position: relative;
-            z-index: 10;
-            width: 80%;
-            max-width: 1200px;
-            padding: 2rem;
-            background: rgba(10, 10, 32, 0.7);
-            border-radius: 20px;
-            border: 1px solid rgba(0, 247, 255, 0.3);
-            box-shadow: 0 0 50px rgba(0, 247, 255, 0.1),
-                        inset 0 0 20px rgba(0, 247, 255, 0.1);
-            backdrop-filter: blur(10px);
-            transform-style: preserve-3d;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .menu-header {
-            text-align: center;
-            margin-bottom: 3rem;
-            position: relative;
-        }
-
-        .game-logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 4rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 20px rgba(0, 247, 255, 0.3);
-            margin-bottom: 1rem;
-            letter-spacing: 5px;
-        }
-
-        .game-subtitle {
-            font-size: 1.2rem;
-            letter-spacing: 3px;
-            color: var(--primary);
-            text-transform: uppercase;
-        }
-
-        .menu-nav {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .nav-item {
-            position: relative;
-            padding: 1rem 2rem;
-            font-size: 1.2rem;
-            font-weight: 500;
-            color: var(--light);
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .nav-item:hover {
-            color: var(--primary);
-            transform: translateY(-5px);
-        }
-
-        .nav-item::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 2px;
-            background: var(--primary);
-            transition: width 0.3s ease;
-        }
-
-        .nav-item:hover::after {
-            width: 80%;
-        }
-
-        .menu-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-
-        .character-display {
-            position: relative;
-            height: 400px;
-            border-radius: 15px;
-            overflow: hidden;
-            border: 1px solid rgba(0, 247, 255, 0.3);
-            box-shadow: 0 0 30px rgba(0, 247, 255, 0.1);
-        }
-
-        .character-3d {
-            width: 100%;
-            height: 100%;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .server-info {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .server-status {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 1.5rem;
-            border-left: 4px solid var(--primary);
-        }
-
-        .status-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-            color: var(--primary);
-        }
-
-        .status-indicator {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #0f0;
-            box-shadow: 0 0 10px #0f0;
-        }
-
-        .status-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        .status-item {
-            font-size: 0.9rem;
-        }
-
-        .status-item span {
-            color: var(--primary);
-            font-weight: 500;
-        }
-
-        .news-card {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 1.5rem;
-            border-left: 4px solid var(--secondary);
-        }
-
-        .news-title {
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            color: var(--secondary);
-        }
-
-        .news-item {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .news-item:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-
-        .news-date {
-            font-size: 0.8rem;
-            color: var(--primary);
-            min-width: 70px;
-        }
-
-        .news-text {
-            font-size: 0.9rem;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .btn {
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary {
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            color: var(--darker);
-            box-shadow: 0 0 20px rgba(0, 247, 255, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0 30px rgba(0, 247, 255, 0.5);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(0, 247, 255, 0.1);
-            transform: translateY(-3px);
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0) rotateX(3deg) rotateY(2deg);
-            }
-            50% {
-                transform: translateY(-20px) rotateX(-3deg) rotateY(-2deg);
-            }
-        }
-
-        /* Эффекты неонового свечения */
-        .glow {
-            text-shadow: 0 0 10px currentColor;
-        }
-
-        /* Адаптивность */
-        @media (max-width: 992px) {
-            .menu-content {
-                grid-template-columns: 1fr;
-            }
-            .game-logo {
-                font-size: 3rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .menu-nav {
-                flex-direction: column;
-                align-items: center;
-                gap: 1rem;
-            }
-            .action-buttons {
-                flex-direction: column;
-            }
-            .game-logo {
-                font-size: 2.5rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoPost | Братва в эфире</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div id="game-container">
-        <div id="particles-js"></div>
-        <div class="main-menu">
-            <div class="menu-header">
-                <h1 class="game-logo glow">PERFECT WORLD</h1>
-                <p class="game-subtitle">Next-Generation MMORPG Experience</p>
-            </div>
-            <nav class="menu-nav">
-                <a href="#" class="nav-item">Home</a>
-                <a href="#" class="nav-item">Classes</a>
-                <a href="#" class="nav-item">World</a>
-                <a href="#" class="nav-item">PvP</a>
-                <a href="#" class="nav-item">Shop</a>
-                <a href="#" class="nav-item">Community</a>
-            </nav>
-            <div class="menu-content">
-                <div class="character-display">
-                    <div class="character-3d" id="character-model">
-                        <!-- Здесь будет 3D модель -->
-                    </div>
-                </div>
-                <div class="server-info">
-                    <div class="server-status">
-                        <div class="status-title">
-                            <div class="status-indicator"></div>
-                            <span>SERVER STATUS: ONLINE</span>
-                        </div>
-                        <div class="status-details">
-                            <div class="status-item">
-                                Players online: <span>12,845</span>
-                            </div>
-                            <div class="status-item">
-                                New players: <span>328</span>
-                            </div>
-                            <div class="status-item">
-                                PvP battles: <span>1,203</span>
-                            </div>
-                            <div class="status-item">
-                                Dungeons: <span>576</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="news-card">
-                        <h3 class="news-title">LATEST UPDATES</h3>
-                        <div class="news-item">
-                            <div class="news-date">12.05.2023</div>
-                            <div class="news-text">New dungeon "Temple of Forgotten Gods" released</div>
-                        </div>
-                        <div class="news-item">
-                            <div class="news-date">05.05.2023</div>
-                            <div class="news-text">Season 8 of PvP Arena has begun</div>
-                        </div>
-                        <div class="news-item">
-                            <div class="news-date">28.04.2023</div>
-                            <div class="news-text">New character class "Stormcaller" available</div>
-                        </div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="btn btn-primary">PLAY NOW</button>
-                        <button class="btn btn-secondary">CREATE ACCOUNT</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+<body class="theme-dark">
+
+  <header class="navbar glass">
+    <div class="container">
+      <h1>AutoPost<span class="accent">.ru</span></h1>
+      <button id="themeToggle" class="btn-icon" aria-label="Сменить тему">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+      </button>
     </div>
+  </header>
 
-    <!-- Подключаем библиотеки -->
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/examples/js/controls/OrbitControls.min.js"></script> 
-    <script>
-        // Инициализация частиц фона
-        particlesJS('particles-js', {
-            "particles": {
-                "number": {
-                    "value": 80,
-                    "density": {
-                        "enable": true,
-                        "value_area": 800
-                    }
-                },
-                "color": {
-                    "value": "#00f7ff"
-                },
-                "shape": {
-                    "type": "circle",
-                    "stroke": {
-                        "width": 0,
-                        "color": "#000000"
-                    }
-                },
-                "opacity": {
-                    "value": 0.5,
-                    "random": true,
-                    "anim": {
-                        "enable": true,
-                        "speed": 1,
-                        "opacity_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "size": {
-                    "value": 3,
-                    "random": true,
-                    "anim": {
-                        "enable": true,
-                        "speed": 2,
-                        "size_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "line_linked": {
-                    "enable": true,
-                    "distance": 150,
-                    "color": "#00f7ff",
-                    "opacity": 0.2,
-                    "width": 1
-                },
-                "move": {
-                    "enable": true,
-                    "speed": 1,
-                    "direction": "none",
-                    "random": true,
-                    "straight": false,
-                    "out_mode": "out",
-                    "bounce": false,
-                    "attract": {
-                        "enable": true,
-                        "rotateX": 600,
-                        "rotateY": 1200
-                    }
-                }
-            },
-            "interactivity": {
-                "detect_on": "canvas",
-                "events": {
-                    "onhover": {
-                        "enable": true,
-                        "mode": "grab"
-                    },
-                    "onclick": {
-                        "enable": true,
-                        "mode": "push"
-                    },
-                    "resize": true
-                },
-                "modes": {
-                    "grab": {
-                        "distance": 140,
-                        "line_linked": {
-                            "opacity": 0.5
-                        }
-                    },
-                    "push": {
-                        "particles_nb": 4
-                    }
-                }
-            },
-            "retina_detect": true
-        });
+  <main class="container">
+    <section class="hero">
+      <h2>Пиши один раз —<br><span class="highlight">братва увидит везде</span></h2>
+      <p>Автопостинг в Telegram, ВК, Одноклассники и другие сети без заморочек.</p>
+    </section>
 
-        // Параллакс эффект для меню
-        document.addEventListener('mousemove', (e) => {
-            const menu = document.querySelector('.main-menu');
-            if (menu) {
-                const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-                const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-                menu.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-            }
-        });
+    <!-- Подключение аккаунтов -->
+    <section class="cards">
+      <div class="card glass" data-platform="vk">
+        <img src="assets/icons/vk.svg" alt="ВКонтакте">
+        <h3>ВКонтакте</h3>
+        <button class="btn connect-btn">Подключить</button>
+      </div>
+      <div class="card glass" data-platform="tg">
+        <img src="assets/icons/telegram.svg" alt="Telegram">
+        <h3>Telegram</h3>
+        <button class="btn connect-btn">Подключить</button>
+      </div>
+      <div class="card glass" data-platform="ok">
+        <img src="assets/icons/ok.svg" alt="Одноклассники">
+        <h3>Одноклассники</h3>
+        <button class="btn connect-btn">Подключить</button>
+      </div>
+    </section>
 
-        // Анимация кнопок
-        const buttons = document.querySelectorAll('.btn');
-        buttons.forEach(button => {
-            button.addEventListener('mouseenter', () => {
-                button.classList.add('glow');
-            });
-            button.addEventListener('mouseleave', () => {
-                button.classList.remove('glow');
-            });
-        });
+    <!-- Редактор поста -->
+    <section class="editor glass">
+      <h3>Твой пост для братвы</h3>
+      <textarea id="postText" placeholder="Братики, сегодня эфир 🔥..."></textarea>
+      
+      <div class="platform-selector">
+        <label><input type="checkbox" value="vk"> ВК</label>
+        <label><input type="checkbox" value="tg"> TG</label>
+        <label><input type="checkbox" value="ok"> OK</label>
+      </div>
 
-        // Загрузка 3D модели
-        function initCharacterModel() {
-            const modelContainer = document.getElementById("character-model");
-            modelContainer.innerHTML = "";
+      <button id="sendBtn" class="btn btn-primary">Отправить братве 🚀</button>
+    </section>
+  </main>
 
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ alpha: true });
-            renderer.setSize(modelContainer.clientWidth, modelContainer.clientHeight);
-            modelContainer.appendChild(renderer.domElement);
-
-            const geometry = new THREE.BoxGeometry();
-            const material = new THREE.MeshStandardMaterial({ color: 0xff0000 }); // Красный цвет по умолчанию
-            const cube = new THREE.Mesh(geometry, material);
-            scene.add(cube);
-
-            const light = new THREE.DirectionalLight(0xffffff, 1);
-            light.position.set(0, 1, 1).normalize();
-            scene.add(light);
-
-            camera.position.z = 5;
-
-            const controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
-
-            function animate() {
-                requestAnimationFrame(animate);
-                cube.rotation.x += 0.01;
-                cube.rotation.y += 0.01;
-                controls.update();
-                renderer.render(scene, camera);
-            }
-
-            animate();
-
-            window.addEventListener('resize', () => {
-                camera.aspect = modelContainer.clientWidth / modelContainer.clientHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(modelContainer.clientWidth, modelContainer.clientHeight);
-            });
-        }
-
-        // Запуск 3D модели при загрузке страницы
-        window.onload = () => {
-            initCharacterModel();
-        };
-    </script>
+  <script src="js/main.js"></script>
 </body>
 </html>
