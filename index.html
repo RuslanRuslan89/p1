@@ -3,65 +3,235 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AutoPost — автопостинг в Telegram, ВК, Одноклассники. Пиши один раз — братва увидит везде.">
   <title>AutoPost | Братва в эфире</title>
-  <link rel="stylesheet" href="css/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
-</head>
-<body class="theme-dark">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a14;
+      --fg: #eaeaff;
+      --muted: #a0a0c0;
+      --accent: #00f5d4;
+      --card-bg: rgba(20, 20, 40, 0.5);
+      --border: rgba(255, 255, 255, 0.08);
+      --radius: 20px;
+      --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
 
-  <header class="navbar glass">
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Geist', system-ui, sans-serif;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    header {
+      padding: 2.5rem 0 1rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-weight: 600;
+      font-size: 1.8rem;
+      background: linear-gradient(90deg, #fff, var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 4rem 0 3rem;
+    }
+
+    .hero h2 {
+      font-size: clamp(2.2rem, 6vw, 3.4rem);
+      font-weight: 600;
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .section {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      padding: 2.5rem 0;
+    }
+
+    .section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      margin-bottom: 2rem;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      color: var(--fg);
+    }
+
+    ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 1.05rem;
+    }
+
+    .platform-icon {
+      width: 28px;
+      height: 28px;
+      opacity: 0.9;
+      transition: var(--transition);
+    }
+
+    li:hover .platform-icon {
+      transform: scale(1.15);
+      opacity: 1;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 0 4rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 0 1.5rem; }
+      h1 { font-size: 1.5rem; }
+      .hero h2 { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
     <div class="container">
-      <h1>AutoPost<span class="accent">.ru</span></h1>
-      <button id="themeToggle" class="btn-icon" aria-label="Сменить тему">
-        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-        </svg>
-      </button>
+      <h1>AutoPost<span style="color:#00f5d4">.ru</span></h1>
     </div>
   </header>
 
   <main class="container">
     <section class="hero">
-      <h2>Пиши один раз —<br><span class="highlight">братва увидит везде</span></h2>
-      <p>Автопостинг в Telegram, ВК, Одноклассники и другие сети без заморочек.</p>
+      <h2 id="hero-text">Пиши один раз…</h2>
+      <p>AutoPost — твой цифровой эмиссар в русскоязычный сегмент соцсетей. Братва увидит всё — без копипаста, без заморочек.</p>
     </section>
 
-    <!-- Подключение аккаунтов -->
-    <section class="cards">
-      <div class="card glass" data-platform="vk">
-        <img src="assets/icons/vk.svg" alt="ВКонтакте">
-        <h3>ВКонтакте</h3>
-        <button class="btn connect-btn">Подключить</button>
-      </div>
-      <div class="card glass" data-platform="tg">
-        <img src="assets/icons/telegram.svg" alt="Telegram">
-        <h3>Telegram</h3>
-        <button class="btn connect-btn">Подключить</button>
-      </div>
-      <div class="card glass" data-platform="ok">
-        <img src="assets/icons/ok.svg" alt="Одноклассники">
-        <h3>Одноклассники</h3>
-        <button class="btn connect-btn">Подключить</button>
+    <section class="section" id="platforms">
+      <div class="card">
+        <h3>Поддерживаемые сети</h3>
+        <ul>
+          <li>
+            <svg class="platform-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM16.5 11.5L13.5 14.5L11 12L7.5 15.5L6.5 14.5L11 10L13.5 12.5L16.5 9.5L17.5 10.5L16.5 11.5Z" fill="#00f5d4"/>
+            </svg>
+            <strong>Telegram</strong> — каналы и чаты
+          </li>
+          <li>
+            <svg class="platform-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM15 11H13V9H11V11H9V13H11V15H13V13H15V11Z" fill="#4a76a8"/>
+            </svg>
+            <strong>ВКонтакте</strong> — группы и паблики
+          </li>
+          <li>
+            <svg class="platform-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM13 11H11V9H13V11ZM13 15H11V13H13V15Z" fill="#f78f24"/>
+            </svg>
+            <strong>Одноклассники</strong> — сообщества
+          </li>
+          <li>
+            <svg class="platform-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              <path d="M12 8V12L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Другие русскоязычные платформы (в разработке)
+          </li>
+        </ul>
       </div>
     </section>
 
-    <!-- Редактор поста -->
-    <section class="editor glass">
-      <h3>Твой пост для братвы</h3>
-      <textarea id="postText" placeholder="Братики, сегодня эфир 🔥..."></textarea>
-      
-      <div class="platform-selector">
-        <label><input type="checkbox" value="vk"> ВК</label>
-        <label><input type="checkbox" value="tg"> TG</label>
-        <label><input type="checkbox" value="ok"> OK</label>
+    <section class="section" id="how-it-works">
+      <div class="card">
+        <h3>Как это работает?</h3>
+        <p>
+          Ты пишешь пост один раз — мы разносим его по всем подключённым площадкам.<br>
+          Всё происходит автоматически: мгновенно или по расписанию.<br>
+          Ты остаёшься в эфире — мы держим связь с братвой.
+        </p>
       </div>
-
-      <button id="sendBtn" class="btn btn-primary">Отправить братве 🚀</button>
     </section>
+
+    <footer>
+      <p>© 2025 AutoPost.ru — для тех, кто говорит с братвой на одном языке.</p>
+    </footer>
   </main>
 
-  <script src="js/main.js"></script>
+  <script>
+    // Динамический hero-текст
+    const heroText = document.getElementById('hero-text');
+    const phrases = ['Пиши один раз…', 'Братва увидит везде'];
+    let i = 0;
+    setInterval(() => {
+      heroText.textContent = phrases[i % phrases.length];
+      heroText.style.opacity = '0';
+      setTimeout(() => {
+        heroText.style.opacity = '1';
+        i++;
+      }, 300);
+    }, 3000);
+
+    // Анимация при скролле
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.section').forEach(section => {
+      observer.observe(section);
+    });
+  </script>
 </body>
 </html>
